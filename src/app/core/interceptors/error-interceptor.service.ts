@@ -1,38 +1,33 @@
-import { HttpInterceptorFn } from '@angular/common/http';
-import { inject } from '@angular/core';
+import { Injectable } from '@angular/core';
+import {
+  HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpErrorResponse
+} from '@angular/common/http';
+import { Observable, throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 import { Router } from '@angular/router';
-import { catchError, throwError } from 'rxjs';
 
-export const errorInterceptor: HttpInterceptorFn = (req, next) => {
-  const router = inject(Router);
+@Injectable()
+export class ErrorInterceptorService implements HttpInterceptor {
 
-  return next(req).pipe(
-    catchError(error => {
-      if (error.status === 401) {
-        // Token expirado o no autorizado
-        console.error('Error 401: Sesión expirada o no autorizado');
-        router.navigate(['/auth/login']);
-        return throwError(() => new Error('Tu sesión ha expirado. Por favor, inicia sesión nuevamente.'));
-      }
+  constructor(private router: Router) {}
 
-      if (error.status === 403) {
-        console.error('Error 403: Acceso prohibido');
-        return throwError(() => new Error('No tienes permiso para acceder a este recurso.'));
-      }
-
-      if (error.status === 404) {
-        console.error('Error 404: Recurso no encontrado');
-        return throwError(() => new Error('El recurso solicitado no existe.'));
-      }
-
-      if (error.status === 500) {
-        console.error('Error 500: Error interno del servidor');
-        return throwError(() => new Error('Ha ocurrido un error en el servidor. Por favor, intenta más tarde.'));
-      }
-
-      // Otros errores
-      console.error(`Error ${error.status}: ${error.message}`);
-      return throwError(() => error);
-    })
-  );
-};
+  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+    return next.handle(req).pipe(
+      catchError((error: HttpErrorResponse) => {
+        switch (error.status) {
+          case 401:
+            this.router.navigate(['/auth/login']);
+            return throwError(() => new Error('Tu sesión ha expirado.'));
+          case 403:
+            return throwError(() => new Error('Acceso prohibido'));
+          case 404:
+            return throwError(() => new Error('Recurso no encontrado'));
+          case 500:
+            return throwError(() => new Error('Error interno del servidor'));
+          default:
+            return throwError(() => error);
+        }
+      })
+    );
+  }
+}

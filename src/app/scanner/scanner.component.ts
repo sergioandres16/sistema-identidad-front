@@ -1,13 +1,14 @@
 import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AccessLogService } from '../../core/services/access-log.service';
+import { AccessLogService } from '../core/services/access-log.service';
 import { NgxScannerQrcodeComponent } from 'ngx-scanner-qrcode';
-import { QrValidationResponse } from '../../core/models/qr-validation.model';
+import { QrValidationResponse } from '../core/models/qr-validation.model';
 import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-scanner',
   templateUrl: './scanner.component.html',
+  standalone: true,
   styleUrls: ['./scanner.component.scss']
 })
 export class ScannerComponent implements OnInit, OnDestroy {

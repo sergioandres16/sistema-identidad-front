@@ -1,10 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Title</title>
-</head>
-<body>
+<h2>Lista de usuarios</h2>
 
-</body>
-</html>
+<p *ngIf="users.length === 0">
+  (Aún no hay datos que mostrar)
+</p>
+
+<ul *ngIf="users.length">
+  <li *ngFor="let u of users">
+    {{ u.username || u }}
+  </li>
+</ul>

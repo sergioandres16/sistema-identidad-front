@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Subscription } from 'rxjs';
+import { interval, Subscription } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
 import { User } from '../core/models/user.model';
 import { AccessLog } from '../core/models/access-log.model';
 import { Notification } from '../core/models/notification.model';
@@ -14,9 +15,8 @@ import { SharedModule } from '../shared/shared.module';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.scss'],
   standalone: true,
-  imports: [CommonModule, SharedModule, CardManagementModule]
+  styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit, OnDestroy {
   currentUser: User | null = null;

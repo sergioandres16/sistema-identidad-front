@@ -12,13 +12,13 @@ const routes: Routes = [
 
 @NgModule({
   declarations: [
-    DashboardComponent
   ],
   imports: [
     CommonModule,
     RouterModule.forChild(routes),
     SharedModule,
-    CardManagementModule
+    CardManagementModule,
+    DashboardComponent
   ]
 })
 export class DashboardModule { }

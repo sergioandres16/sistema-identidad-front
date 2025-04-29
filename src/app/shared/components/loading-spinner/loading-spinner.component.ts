@@ -1,15 +1,14 @@
-// src/app/shared/components/loading-spinner/loading-spinner.component.ts
 import { Component, Input } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgClass } from '@angular/common';
 
 @Component({
-  selector: 'app-loading-spinner',
+  selector:    'app-loading-spinner',
+  standalone:  true,
   templateUrl: './loading-spinner.component.html',
-  styleUrls: ['./loading-spinner.component.scss'],
-  standalone: true,
-  imports: [CommonModule]
+  styleUrls:   ['./loading-spinner.component.scss'],
+  imports: [CommonModule, NgClass]
 })
 export class LoadingSpinnerComponent {
-  @Input() size: string = 'medium'; // small, medium, large
-  @Input() color: string = 'primary'; // primary, secondary, light, dark
+  @Input() size  : 'small'|'medium'|'large' = 'medium';
+  @Input() color : 'primary'|'secondary'|'light'|'dark' = 'primary';
 }

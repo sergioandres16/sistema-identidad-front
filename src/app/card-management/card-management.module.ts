@@ -1,31 +1,22 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { RouterModule, Routes } from '@angular/router';
+import { NgModule }            from '@angular/core';
+import { CommonModule }        from '@angular/common';
+import { RouterModule, Routes} from '@angular/router';
+import { SharedModule }        from '../shared/shared.module';
 
-import { IdCardComponent } from './id-card/id-card.component';
-import { QrGeneratorComponent } from './qr-generator/qr-generator.component';
-import { CardStatusComponent } from './card-status/card-status.component';
-import { SharedModule } from '../shared/shared.module';
+/* stand-alone ↓ */
+import { IdCardComponent     } from './id-card/id-card.component';
 
 const routes: Routes = [
-  { path: 'id-card', component: IdCardComponent }
+  { path: '', component: IdCardComponent }   // ejemplo: vista raíz
 ];
 
 @NgModule({
-  declarations: [
-    IdCardComponent,
-    QrGeneratorComponent,
-    CardStatusComponent
-  ],
+  declarations: [],              //  ←  NADA
   imports: [
     CommonModule,
+    SharedModule,
     RouterModule.forChild(routes),
-    SharedModule
-  ],
-  exports: [
-    IdCardComponent,
-    QrGeneratorComponent,
-    CardStatusComponent
+    IdCardComponent              //  👈 se **importa**, no se declara
   ]
 })
-export class CardManagementModule { }
+export class CardManagementModule {}

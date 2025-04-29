@@ -1,17 +1,21 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {CommonModule, NgClass, NgFor, NgIf} from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { AuthService } from '../../core/services/auth.service';
+import { AuthService } from '../../../core/services/auth.service';
 import { Router } from '@angular/router';
-import { NotificationService } from '../../core/services/notification.service';
+import { NotificationService } from '../../../core/services/notification.service';
 import { NotificationPanelComponent } from '../notification-panel/notification-panel.component';
 
 @Component({
-  selector: 'app-header',
+  selector:    'app-header',
+  standalone:  true,
   templateUrl: './header.component.html',
-  styleUrls: ['./header.component.scss'],
-  standalone: true,
-  imports: [CommonModule, RouterModule, NotificationPanelComponent]
+  styleUrls:   ['./header.component.scss'],
+  imports: [
+    CommonModule, RouterModule,
+    NgIf, NgFor, NgClass,
+    NotificationPanelComponent
+  ]
 })
 export class HeaderComponent implements OnInit {
   isLoggedIn = false;

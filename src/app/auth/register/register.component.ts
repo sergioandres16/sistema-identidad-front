@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AuthService } from '../../../core/services/auth.service';
-import { RegisterRequest } from '../../../core/models/auth.model';
+import { AuthService } from '../../core/services/auth.service';
+import { RegisterRequest } from '../../core/models/auth.model';
 
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
+  standalone: true,
   styleUrls: ['./register.component.scss']
 })
 export class RegisterComponent implements OnInit {

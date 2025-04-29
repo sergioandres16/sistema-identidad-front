@@ -1,29 +1,24 @@
-import { HttpInterceptorFn } from '@angular/common/http';
-import { inject } from '@angular/core';
+// reemplaza todo el archivo
+import { Injectable } from '@angular/core';
+import {
+  HttpEvent, HttpHandler, HttpInterceptor, HttpRequest
+} from '@angular/common/http';
+import { Observable } from 'rxjs';
 
-export const authInterceptor: HttpInterceptorFn = (req, next) => {
-  // Accedemos al token del localStorage directamente
-  const userDataString = localStorage.getItem('userData');
+@Injectable()
+export class AuthInterceptorService implements HttpInterceptor {
 
-  if (!userDataString) {
-    return next(req);
+  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+    const userDataString = localStorage.getItem('userData');
+    if (!userDataString) { return next.handle(req); }
+
+    try {
+      const { token } = JSON.parse(userDataString);
+      if (token) {
+        req = req.clone({ setHeaders: { Authorization: `Bearer ${token}` } });
+      }
+    } catch { /* ignoramos error de parseo */ }
+
+    return next.handle(req);
   }
-
-  try {
-    const userData = JSON.parse(userDataString);
-    const token = userData.token;
-
-    if (token) {
-      const modifiedReq = req.clone({
-        setHeaders: {
-          Authorization: `Bearer ${token}`
-        }
-      });
-      return next(modifiedReq);
-    }
-  } catch (e) {
-    console.error('Error parsing user data', e);
-  }
-
-  return next(req);
-};
+}

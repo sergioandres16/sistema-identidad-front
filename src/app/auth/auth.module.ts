@@ -15,15 +15,15 @@ const routes: Routes = [
 
 @NgModule({
   declarations: [
-    LoginComponent,
-    RegisterComponent
   ],
   imports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
     RouterModule.forChild(routes),
-    SharedModule
+    SharedModule,
+    LoginComponent,
+    RegisterComponent
   ]
 })
 export class AuthModule { }
