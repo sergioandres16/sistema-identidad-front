@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
-import { catchError, map, tap } from 'rxjs/operators';
+import { catchError, tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
-import { environment } from '../../environments/environment';
+import { environment } from '../../../environments/environment';
 
 interface LoginRequest {
   username: string;
@@ -33,6 +33,16 @@ interface LoginResponse {
   role: string;
 }
 
+export interface User {
+  id: number;
+  username: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  role: string;
+  token: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -40,7 +50,7 @@ export class AuthService {
   private apiUrl = `${environment.apiUrl}/auth`;
   private tokenExpirationTimer: any;
 
-  private currentUserSubject = new BehaviorSubject<any>(null);
+  private currentUserSubject = new BehaviorSubject<User | null>(null);
   public currentUser = this.currentUserSubject.asObservable();
 
   constructor(private http: HttpClient, private router: Router) {
@@ -73,28 +83,39 @@ export class AuthService {
   }
 
   autoLogin() {
-    const userData = JSON.parse(localStorage.getItem('userData'));
+    const userData = localStorage.getItem('userData');
     if (!userData) {
       return;
     }
 
-    const { id, username, firstName, lastName, email, role, _token, _tokenExpirationDate } = userData;
-    const loadedUser = {
-      id,
-      username,
-      firstName,
-      lastName,
-      email,
-      role,
-      token: _token
-    };
+    try {
+      const parsedUser = JSON.parse(userData);
+      const { id, username, firstName, lastName, email, role, token, _tokenExpirationDate } = parsedUser;
 
-    if (loadedUser.token) {
-      const expirationDate = new Date(_tokenExpirationDate);
-      this.currentUserSubject.next(loadedUser);
+      const loadedUser: User = {
+        id,
+        username,
+        firstName,
+        lastName,
+        email,
+        role,
+        token
+      };
 
-      const expirationDuration = expirationDate.getTime() - new Date().getTime();
-      this.autoLogout(expirationDuration);
+      if (loadedUser.token) {
+        const expirationDate = new Date(_tokenExpirationDate);
+
+        // Comprobar si el token no ha expirado
+        if (expirationDate > new Date()) {
+          this.currentUserSubject.next(loadedUser);
+          const expirationDuration = expirationDate.getTime() - new Date().getTime();
+          this.autoLogout(expirationDuration);
+        } else {
+          this.logout();
+        }
+      }
+    } catch (e) {
+      console.error('Error parsing user data', e);
     }
   }
 
@@ -119,15 +140,15 @@ export class AuthService {
   }
 
   get token(): string {
-    return this.currentUserSubject.value?.token;
+    return this.currentUserSubject.value?.token || '';
   }
 
   get userId(): number {
-    return this.currentUserSubject.value?.id;
+    return this.currentUserSubject.value?.id || 0;
   }
 
   get userRole(): string {
-    return this.currentUserSubject.value?.role;
+    return this.currentUserSubject.value?.role || '';
   }
 
   isAdmin(): boolean {
@@ -147,7 +168,7 @@ export class AuthService {
     role: string,
     token: string
   ) {
-    // JWT typically expires in 24 hours
+    // JWT típicamente expira en 24 horas
     const expirationDate = new Date(new Date().getTime() + 24 * 60 * 60 * 1000);
 
     const user = {
@@ -170,10 +191,10 @@ export class AuthService {
     let errorMessage = 'An unknown error occurred!';
 
     if (!errorRes.error || !errorRes.error.message) {
-      return throwError(errorMessage);
+      return throwError(() => new Error(errorMessage));
     }
 
     errorMessage = errorRes.error.message;
-    return throwError(errorMessage);
+    return throwError(() => new Error(errorMessage));
   }
 }

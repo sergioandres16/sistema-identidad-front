@@ -1,24 +1,28 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { User } from '../../../core/models/user.model';
-import { AccessLog } from '../../../core/models/access-log.model';
-import { Notification } from '../../../core/models/notification.model';
-import { UserService } from '../../../core/services/user.service';
-import { AccessLogService } from '../../../core/services/access-log.service';
-import { NotificationService } from '../../../core/services/notification.service';
-import { AuthService } from '../../../core/services/auth.service';
-import { Subscription, interval } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { CommonModule } from '@angular/common';
+import { Subscription } from 'rxjs';
+import { User } from '../core/models/user.model';
+import { AccessLog } from '../core/models/access-log.model';
+import { Notification } from '../core/models/notification.model';
+import { UserService } from '../core/services/user.service';
+import { AccessLogService } from '../core/services/access-log.service';
+import { NotificationService } from '../core/services/notification.service';
+import { AuthService } from '../core/services/auth.service';
+import { CardManagementModule } from '../card-management/card-management.module';
+import { SharedModule } from '../shared/shared.module';
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.scss']
+  styleUrls: ['./dashboard.component.scss'],
+  standalone: true,
+  imports: [CommonModule, SharedModule, CardManagementModule]
 })
 export class DashboardComponent implements OnInit, OnDestroy {
   currentUser: User | null = null;
   accessLogs: AccessLog[] = [];
   notifications: Notification[] = [];
-  unreadCount: number = 0;
+  unreadCount = 0;
 
   isLoadingUser = false;
   isLoadingLogs = false;
@@ -58,12 +62,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
     this.userService.getUserById(userId)
       .subscribe({
-        next: (user) => {
+        next: (user: User) => {
           this.currentUser = user;
           this.isLoadingUser = false;
           this.userError = null;
         },
-        error: (err) => {
+        error: (err: any) => {
           this.userError = 'No se pudo cargar la información del usuario';
           this.isLoadingUser = false;
         }
@@ -78,12 +82,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
     this.accessLogService.getUserAccessHistory(userId, 10)
       .subscribe({
-        next: (logs) => {
+        next: (logs: AccessLog[]) => {
           this.accessLogs = logs;
           this.isLoadingLogs = false;
           this.accessLogsError = null;
         },
-        error: (err) => {
+        error: (err: any) => {
           this.accessLogsError = 'No se pudo cargar el historial de accesos';
           this.isLoadingLogs = false;
         }

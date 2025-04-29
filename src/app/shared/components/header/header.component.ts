@@ -1,12 +1,17 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from '../../../core/services/auth.service';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { AuthService } from '../../core/services/auth.service';
 import { Router } from '@angular/router';
-import { NotificationService } from '../../../core/services/notification.service';
+import { NotificationService } from '../../core/services/notification.service';
+import { NotificationPanelComponent } from '../notification-panel/notification-panel.component';
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
-  styleUrls: ['./header.component.scss']
+  styleUrls: ['./header.component.scss'],
+  standalone: true,
+  imports: [CommonModule, RouterModule, NotificationPanelComponent]
 })
 export class HeaderComponent implements OnInit {
   isLoggedIn = false;
@@ -15,13 +20,13 @@ export class HeaderComponent implements OnInit {
   showNotifications = false;
 
   constructor(
-    private authService: AuthService,
+    public authService: AuthService,
     private notificationService: NotificationService,
     private router: Router
   ) {}
 
   ngOnInit(): void {
-    this.authService.currentUser.subscribe(user => {
+    this.authService.currentUser.subscribe((user: any) => {
       this.isLoggedIn = !!user;
       this.username = user?.firstName || '';
 

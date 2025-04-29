@@ -27,7 +27,7 @@
         <div class="user-info">
           <div class="photo-container">
             <img
-              [src]="card.profilePhoto || 'assets/images/profile-placeholder.png'"
+              [src]="card.profilePhoto ? ('data:image/jpeg;base64,' + card.profilePhoto) : 'assets/images/profile-placeholder.png'"
               alt="Foto de perfil"
               class="profile-photo"
             />

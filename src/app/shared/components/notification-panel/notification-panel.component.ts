@@ -1,11 +1,16 @@
+// src/app/shared/components/notification-panel/notification-panel.component.ts
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { Notification } from '../../../core/models/notification.model';
 import { NotificationService } from '../../../core/services/notification.service';
+import { LoadingSpinnerComponent } from '../loading-spinner/loading-spinner.component';
 
 @Component({
   selector: 'app-notification-panel',
   templateUrl: './notification-panel.component.html',
-  styleUrls: ['./notification-panel.component.scss']
+  styleUrls: ['./notification-panel.component.scss'],
+  standalone: true,
+  imports: [CommonModule, LoadingSpinnerComponent]
 })
 export class NotificationPanelComponent implements OnInit {
   @Input() userId!: number;

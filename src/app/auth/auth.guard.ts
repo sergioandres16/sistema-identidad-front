@@ -1,41 +1,24 @@
-import { Injectable } from '@angular/core';
-import {
-  ActivatedRouteSnapshot,
-  CanActivate,
-  Router,
-  RouterStateSnapshot,
-  UrlTree
-} from '@angular/router';
-import { Observable } from 'rxjs';
-import { AuthService } from './auth.service';
-import { map, take } from 'rxjs/operators';
+import { inject } from '@angular/core';
+import { CanActivateFn, Router } from '@angular/router';
+import { AuthService } from '../core/services/auth.service';
 
-@Injectable({
-  providedIn: 'root'
-})
-export class AuthGuard implements CanActivate {
+export const authGuard: CanActivateFn = (route, state) => {
+  const authService = inject(AuthService);
+  const router = inject(Router);
 
-  constructor(private authService: AuthService, private router: Router) {}
-
-  canActivate(
-    route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot
-  ): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-
-    if (this.authService.isLoggedIn) {
-      // Check if route requires admin role
-      if (route.data['roles'] && route.data['roles'].includes('ROLE_ADMIN') && !this.authService.isAdmin()) {
-        return this.router.createUrlTree(['/dashboard']);
-      }
-
-      // Check if route requires scanner role
-      if (route.data['roles'] && route.data['roles'].includes('ROLE_SCANNER') && !this.authService.isScanner()) {
-        return this.router.createUrlTree(['/dashboard']);
-      }
-
-      return true;
+  if (authService.isLoggedIn) {
+    // Verificar si la ruta requiere el rol de admin
+    if (route.data['roles'] && route.data['roles'].includes('ROLE_ADMIN') && !authService.isAdmin()) {
+      return router.createUrlTree(['/dashboard']);
     }
 
-    return this.router.createUrlTree(['/auth/login']);
+    // Verificar si la ruta requiere el rol de scanner
+    if (route.data['roles'] && route.data['roles'].includes('ROLE_SCANNER') && !authService.isScanner()) {
+      return router.createUrlTree(['/dashboard']);
+    }
+
+    return true;
   }
-}
+
+  return router.createUrlTree(['/auth/login']);
+};

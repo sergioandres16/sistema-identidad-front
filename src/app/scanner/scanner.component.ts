@@ -1,8 +1,8 @@
 import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AccessLogService } from '../../../core/services/access-log.service';
+import { AccessLogService } from '../../core/services/access-log.service';
 import { NgxScannerQrcodeComponent } from 'ngx-scanner-qrcode';
-import { QrValidationResponse } from '../../../core/models/qr-validation.model';
+import { QrValidationResponse } from '../../core/models/qr-validation.model';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -41,7 +41,7 @@ export class ScannerComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    // Initialize scanner settings
+    // Inicializar ajustes del escáner
   }
 
   ngOnDestroy(): void {
@@ -59,10 +59,13 @@ export class ScannerComponent implements OnInit, OnDestroy {
       this.error = null;
       this.scanResult = null;
 
-      // Subscribe to scanner events
+      // Suscribirse a eventos del escáner
       this.scanSubscription = this.scanner.data.subscribe((result) => {
         if (result && result.length > 0 && result[0].value) {
-          this.onScanSuccess(result[0].value);
+          // Procesar el resultado solo si es un token JWT válido
+          const qrValue = result[0].value;
+          console.log('QR detectado:', qrValue);
+          this.onScanSuccess(qrValue);
         }
       });
     }
@@ -82,7 +85,18 @@ export class ScannerComponent implements OnInit, OnDestroy {
 
   onScanSuccess(qrString: string): void {
     this.stopScanner();
-    this.validateQrCode(qrString);
+
+    // Limpiar el resultado si tiene prefijos comunes
+    let tokenValue = qrString;
+    const jwtPattern = /^(Bearer\s+)?([A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.?[A-Za-z0-9-_.+/=]*)$/;
+
+    const match = qrString.match(jwtPattern);
+    if (match) {
+      // Si hay un match, usar el grupo 2 que es el token real
+      tokenValue = match[2];
+    }
+
+    this.validateQrCode(tokenValue);
   }
 
   validateQrCode(qrToken: string): void {
@@ -100,6 +114,7 @@ export class ScannerComponent implements OnInit, OnDestroy {
           this.isLoading = false;
         },
         error: (err) => {
+          console.error('Error al validar QR:', err);
           this.error = 'Error al validar el código QR: ' + (err.message || 'Error desconocido');
           this.isLoading = false;
           this.scanResult = null;
@@ -116,12 +131,13 @@ export class ScannerComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (result) => {
           if (this.scanResult) {
-            // Update scan result with new status
+            // Actualizar resultado del escaneo con el nuevo estado
             this.scanResult.userStatus = this.getStatusNameById(newStatusId);
           }
           this.isLoading = false;
         },
         error: (err) => {
+          console.error('Error al cambiar estado:', err);
           this.error = 'Error al cambiar el estado del usuario: ' + (err.message || 'Error desconocido');
           this.isLoading = false;
         }
