@@ -2,11 +2,14 @@ import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { CommonModule, NgIf, NgFor, NgClass } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { AccessLogService } from '../core/services/access-log.service';
-import { NgxScannerQrcodeComponent } from 'ngx-scanner-qrcode';
+import { NgxScannerQrcodeComponent, LOAD_WASM } from 'ngx-scanner-qrcode';
 import { QrValidationResponse } from '../core/models/qr-validation.model';
 import { Subscription } from 'rxjs';
 import { LoadingSpinnerComponent } from '../shared/components/loading-spinner/loading-spinner.component';
 
+LOAD_WASM().subscribe((res: any) => {
+  console.log('WASM loaded', res);
+});
 
 @Component({
   selector: 'app-scanner',

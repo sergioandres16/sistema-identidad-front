@@ -14,9 +14,6 @@ import { NotificationPanelComponent } from '../notification-panel/notification-p
   imports: [
     CommonModule,
     RouterModule,
-    NgIf,
-    NgFor,
-    NgClass,
     NotificationPanelComponent
   ]
 })

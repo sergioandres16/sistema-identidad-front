@@ -3,12 +3,12 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ScannerComponent } from './scanner.component';
+
+// Importa correctamente el SharedModule con la ruta relativa
 import { SharedModule } from '../shared/shared.module';
 
-/* standalone component */
-import { ScannerComponent } from './scanner.component';
-// Importación correcta del módulo QR
-import { NgxScannerQrcodeComponent } from 'ngx-scanner-qrcode';
+// No importes NgxScannerQrcodeModule - no existe en la versión 1.7.6
 
 const routes: Routes = [
   { path: '', component: ScannerComponent }
@@ -21,10 +21,9 @@ const routes: Routes = [
     FormsModule,
     ReactiveFormsModule,
     SharedModule,
-    NgxScannerQrcodeComponent, // Usar el módulo correcto
     RouterModule.forChild(routes),
 
-    // Import standalone component
+    // Import the standalone component
     ScannerComponent
   ]
 })
