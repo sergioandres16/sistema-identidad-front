@@ -1,0 +1,48 @@
+<header class="header">
+  <div class="container">
+    <div class="header-content">
+      <div class="logo">
+        <a routerLink="/">
+          <img src="assets/images/logo.png" alt="SAETA Digital ID" />
+        </a>
+      </div>
+
+      <div class="nav-links" *ngIf="isLoggedIn">
+        <a routerLink="/dashboard" routerLinkActive="active">Dashboard</a>
+        <a routerLink="/card" routerLinkActive="active">Mi Carnet</a>
+        <a routerLink="/access-logs" routerLinkActive="active">Historial</a>
+        <a routerLink="/scanner" routerLinkActive="active" *ngIf="isScanner() || isAdmin()">Escáner</a>
+        <a routerLink="/admin" routerLinkActive="active" *ngIf="isAdmin()">Admin</a>
+      </div>
+
+      <div class="user-actions" *ngIf="isLoggedIn">
+        <div class="notification-icon" (click)="toggleNotifications()">
+          <i class="fas fa-bell"></i>
+          <span class="badge" *ngIf="unreadCount > 0">{{ unreadCount }}</span>
+        </div>
+
+        <div class="user-dropdown">
+          <button class="user-button">
+            {{ username }} <i class="fas fa-caret-down"></i>
+          </button>
+          <div class="dropdown-menu">
+            <a routerLink="/dashboard">Mi Perfil</a>
+            <a routerLink="/card">Mi Carnet</a>
+            <a href="javascript:void(0)" (click)="onLogout()">Cerrar Sesión</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="auth-links" *ngIf="!isLoggedIn">
+        <a routerLink="/auth/login" class="btn-login">Iniciar Sesión</a>
+        <a routerLink="/auth/register" class="btn-register">Registrarse</a>
+      </div>
+    </div>
+  </div>
+
+  <app-notification-panel
+    *ngIf="showNotifications"
+    [userId]="authService.userId"
+    (close)="toggleNotifications()">
+  </app-notification-panel>
+</header>

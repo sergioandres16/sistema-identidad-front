@@ -1,0 +1,267 @@
+.dashboard-container {
+  padding: 2rem 0;
+}
+
+.dashboard-title {
+  margin-bottom: 2rem;
+  font-weight: 700;
+  color: #343a40;
+}
+
+.user-info-card .card-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 2rem;
+}
+
+.profile-image {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+  border: 3px solid #f0f0f0;
+}
+
+.profile-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.user-email {
+  color: #6c757d;
+  margin-bottom: 1.5rem;
+}
+
+.user-details {
+  width: 100%;
+  text-align: left;
+  margin-bottom: 1.5rem;
+
+  p {
+    margin-bottom: 0.5rem;
+    border-bottom: 1px solid #f0f0f0;
+    padding-bottom: 0.5rem;
+  }
+
+  .detail-label {
+    font-weight: 600;
+    color: #343a40;
+    display: inline-block;
+    width: 100px;
+  }
+}
+
+.user-status {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  margin: 0.5rem 0 1rem;
+  font-weight: 600;
+
+  &.status-active {
+    background-color: #d1e7dd;
+    color: #0f5132;
+  }
+
+  &.status-inactive {
+    background-color: #f8d7da;
+    color: #721c24;
+  }
+
+  &.status-suspended {
+    background-color: #fff3cd;
+    color: #664d03;
+  }
+
+  &.status-debt {
+    background-color: #f5c2c7;
+    color: #842029;
+  }
+
+  &.status-expired {
+    background-color: #e2e3e5;
+    color: #41464b;
+  }
+}
+
+.user-roles {
+  margin: 0.5rem 0;
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
+
+  .badge {
+    background-color: #6c757d;
+    color: white;
+    font-weight: 500;
+    padding: 0.35rem 0.65rem;
+  }
+}
+
+.debt-warning {
+  margin-top: 1rem;
+  padding: 0.75rem;
+  color: #842029;
+  background-color: #f5c2c7;
+  border-radius: 4px;
+  width: 100%;
+  font-weight: 500;
+
+  i {
+    margin-right: 0.5rem;
+  }
+}
+
+.card {
+  border: none;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  border-radius: 8px;
+  overflow: hidden;
+
+  .card-header {
+    background-color: white;
+    border-bottom: 1px solid #e9ecef;
+    padding: 1.25rem 1.5rem;
+
+    h3 {
+      margin: 0;
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #343a40;
+    }
+  }
+
+  .card-body {
+    padding: 1.5rem;
+  }
+}
+
+.badge.bg-primary {
+  background-color: #007bff;
+}
+
+.btn-outline-primary {
+  color: #007bff;
+  border-color: #007bff;
+
+  &:hover {
+    background-color: #007bff;
+    color: white;
+  }
+}
+
+.table {
+  margin-bottom: 0;
+
+  th {
+    font-weight: 600;
+    color: #343a40;
+  }
+
+  td {
+    vertical-align: middle;
+  }
+}
+
+.access-granted {
+  color: #28a745;
+}
+
+.access-denied {
+  color: #dc3545;
+}
+
+.notifications-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.notification-item {
+  padding: 1.25rem;
+  border-radius: 8px;
+  background-color: #f8f9fa;
+  border-left: 4px solid #6c757d;
+
+  &.notification-unread {
+    background-color: #e6f3ff;
+    border-left-color: #007bff;
+  }
+}
+
+.notification-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+
+  h5 {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #343a40;
+  }
+
+  .notification-time {
+    font-size: 0.85rem;
+    color: #6c757d;
+  }
+}
+
+.notification-body {
+  margin-bottom: 0.75rem;
+
+  p {
+    margin: 0;
+    color: #495057;
+  }
+}
+
+.notification-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.notification-type {
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+
+  &.notification-info {
+    background-color: #cff4fc;
+    color: #055160;
+  }
+
+  &.notification-access {
+    background-color: #f8d7da;
+    color: #721c24;
+  }
+
+  &.notification-debt {
+    background-color: #fff3cd;
+    color: #664d03;
+  }
+
+  &.notification-system {
+    background-color: #d1e7dd;
+    color: #0f5132;
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboard-container {
+    padding: 1rem 0;
+  }
+
+  .card {
+    margin-bottom: 1.5rem;
+  }
+}

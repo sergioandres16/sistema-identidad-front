@@ -1,0 +1,73 @@
+<div class="digital-id-container">
+  <ng-container *ngIf="isLoading && !card">
+    <div class="text-center p-4">
+      <app-loading-spinner></app-loading-spinner>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="error">
+    <div class="alert alert-danger">
+      {{ error }}
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="card && !isLoading">
+    <div class="digital-id-card">
+      <div class="card-header" [ngStyle]="{'background-color': card.statusColor || '#007bff'}">
+        <h2>SAETA Digital ID</h2>
+        <app-card-status
+          [status]="card.status"
+          [statusColor]="card.statusColor"
+          [isActive]="card.isActive"
+          [expiryDate]="card.expiryDate"
+        ></app-card-status>
+      </div>
+
+      <div class="card-body">
+        <div class="user-info">
+          <div class="photo-container">
+            <img
+              [src]="card.profilePhoto || 'assets/images/profile-placeholder.png'"
+              alt="Foto de perfil"
+              class="profile-photo"
+            />
+          </div>
+          <div class="user-details">
+            <h3>{{ card.firstName }} {{ card.lastName }}</h3>
+            <p class="card-number">{{ card.cardNumber }}</p>
+            <p class="user-role">{{ card.role }}</p>
+            <p class="expiry-date">Válido hasta: {{ card.expiryDate | date:'dd/MM/yyyy' }}</p>
+          </div>
+        </div>
+
+        <div class="qr-container">
+          <app-qr-generator
+            [qrCodeData]="card.qrCodeBase64"
+            [countdown]="currentQrCountdown"
+          ></app-qr-generator>
+
+          <div class="qr-controls">
+            <button
+              class="btn btn-primary"
+              (click)="renewQrCode()"
+              [disabled]="isLoading"
+            >
+              <i class="fas fa-sync-alt"></i>
+              <span *ngIf="!isLoading">Actualizar QR</span>
+              <app-loading-spinner *ngIf="isLoading" size="small" color="light"></app-loading-spinner>
+            </button>
+
+            <button
+              class="btn"
+              [ngClass]="{'btn-success': qrAutoRefresh, 'btn-secondary': !qrAutoRefresh}"
+              (click)="toggleQrAutoRefresh()"
+            >
+              <i class="fas" [ngClass]="{'fa-toggle-on': qrAutoRefresh, 'fa-toggle-off': !qrAutoRefresh}"></i>
+              {{ qrAutoRefresh ? 'Auto-actualización ON' : 'Auto-actualización OFF' }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</div>

@@ -1,0 +1,13 @@
+<div class="qr-generator">
+  <div class="qr-code">
+    <img [src]="'data:image/png;base64,' + qrCodeData" [width]="size" [height]="size" alt="QR Code" *ngIf="qrCodeData" />
+    <div class="qr-overlay">
+      <div class="qr-countdown" [ngClass]="getCountdownClass()">
+        {{ countdown }}
+      </div>
+    </div>
+  </div>
+  <div class="qr-instructions">
+    <p>Muestra este código QR para validar tu identidad. El código se actualiza automáticamente.</p>
+  </div>
+</div>

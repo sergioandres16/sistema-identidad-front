@@ -1,0 +1,192 @@
+<div class="dashboard-container">
+  <div class="container">
+    <h1 class="dashboard-title">Panel de Control</h1>
+
+    <div class="row">
+      <div class="col-md-4">
+        <div class="card user-info-card">
+          <div class="card-header">
+            <h3>Mi Perfil</h3>
+          </div>
+          <div class="card-body">
+            <ng-container *ngIf="isLoadingUser">
+              <div class="text-center p-4">
+                <app-loading-spinner></app-loading-spinner>
+              </div>
+            </ng-container>
+
+            <ng-container *ngIf="userError">
+              <div class="alert alert-danger">
+                {{ userError }}
+              </div>
+            </ng-container>
+
+            <ng-container *ngIf="currentUser && !isLoadingUser">
+              <div class="profile-image">
+                <img [src]="currentUser.profilePhoto || 'assets/images/profile-placeholder.png'" alt="Foto de perfil">
+              </div>
+
+              <h4>{{ currentUser.firstName }} {{ currentUser.lastName }}</h4>
+              <p class="user-email">{{ currentUser.email }}</p>
+
+              <div class="user-details">
+                <p *ngIf="currentUser.phoneNumber">
+                  <span class="detail-label">Teléfono:</span> {{ currentUser.phoneNumber }}
+                </p>
+
+                <p *ngIf="currentUser.studentCode">
+                  <span class="detail-label">Código:</span> {{ currentUser.studentCode }}
+                </p>
+
+                <p *ngIf="currentUser.faculty">
+                  <span class="detail-label">Facultad:</span> {{ currentUser.faculty }}
+                </p>
+
+                <p *ngIf="currentUser.membershipType">
+                  <span class="detail-label">Membresía:</span> {{ currentUser.membershipType }}
+                </p>
+
+                <p *ngIf="currentUser.membershipExpiry">
+                  <span class="detail-label">Vence:</span> {{ currentUser.membershipExpiry | date:'dd/MM/yyyy' }}
+                </p>
+              </div>
+
+              <div class="user-status" *ngIf="currentUser.statusName" [ngClass]="getStatusClass()">
+                {{ currentUser.statusName }}
+              </div>
+
+              <div class="user-roles" *ngIf="currentUser.roles && currentUser.roles.length > 0">
+                <span class="badge" *ngFor="let role of currentUser.roles">{{ role }}</span>
+              </div>
+
+              <div class="debt-warning" *ngIf="currentUser.hasDebt">
+                <i class="fas fa-exclamation-triangle"></i> Tienes deuda pendiente
+              </div>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-8">
+        <div class="card">
+          <div class="card-header">
+            <h3>Mi Carnet Digital</h3>
+          </div>
+          <div class="card-body p-0">
+            <app-id-card></app-id-card>
+          </div>
+        </div>
+
+        <div class="card mt-4">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <h3>Historial de Accesos</h3>
+            <button class="btn btn-sm btn-outline-primary" (click)="loadAccessLogs()">
+              <i class="fas fa-sync"></i> Actualizar
+            </button>
+          </div>
+          <div class="card-body">
+            <ng-container *ngIf="isLoadingLogs">
+              <div class="text-center p-4">
+                <app-loading-spinner></app-loading-spinner>
+              </div>
+            </ng-container>
+
+            <ng-container *ngIf="accessLogsError">
+              <div class="alert alert-danger">
+                {{ accessLogsError }}
+              </div>
+            </ng-container>
+
+            <ng-container *ngIf="!isLoadingLogs && !accessLogsError">
+              <div class="table-responsive">
+                <table *ngIf="accessLogs && accessLogs.length > 0" class="table table-striped">
+                  <thead>
+                  <tr>
+                    <th>Fecha/Hora</th>
+                    <th>Zona</th>
+                    <th>Tipo</th>
+                    <th>Resultado</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr *ngFor="let log of accessLogs">
+                    <td>{{ log.accessTime | date:'dd/MM/yyyy HH:mm:ss' }}</td>
+                    <td>{{ log.zoneName || 'No especificada' }}</td>
+                    <td>{{ log.accessType }}</td>
+                    <td [ngClass]="getAccessStatusClass(log.accessGranted)">
+                      <span *ngIf="log.accessGranted"><i class="fas fa-check-circle"></i> Concedido</span>
+                      <span *ngIf="!log.accessGranted"><i class="fas fa-times-circle"></i> Denegado</span>
+                      <small *ngIf="!log.accessGranted && log.reasonDenied" class="d-block mt-1">
+                        Motivo: {{ log.reasonDenied }}
+                      </small>
+                    </td>
+                  </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div *ngIf="!accessLogs || accessLogs.length === 0" class="text-center p-4">
+                <p>No hay registros de acceso disponibles.</p>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row mt-4">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <h3>Notificaciones</h3>
+            <div>
+              <span class="badge bg-primary" *ngIf="unreadCount > 0">{{ unreadCount }} sin leer</span>
+              <button class="btn btn-sm btn-outline-primary ms-2" *ngIf="notifications && notifications.length > 0" (click)="markAllNotificationsAsRead()">
+                <i class="fas fa-check-double"></i> Marcar todo como leído
+              </button>
+            </div>
+          </div>
+          <div class="card-body">
+            <ng-container *ngIf="isLoadingNotifications">
+              <div class="text-center p-4">
+                <app-loading-spinner></app-loading-spinner>
+              </div>
+            </ng-container>
+
+            <ng-container *ngIf="notificationsError">
+              <div class="alert alert-danger">
+                {{ notificationsError }}
+              </div>
+            </ng-container>
+
+            <ng-container *ngIf="!isLoadingNotifications && !notificationsError">
+              <div class="notifications-list" *ngIf="notifications && notifications.length > 0">
+                <div *ngFor="let notification of notifications" class="notification-item" [ngClass]="{'notification-unread': !notification.isRead}">
+                  <div class="notification-header">
+                    <h5>{{ notification.title }}</h5>
+                    <span class="notification-time">{{ notification.createdAt | date:'dd/MM/yyyy HH:mm' }}</span>
+                  </div>
+                  <div class="notification-body">
+                    <p>{{ notification.message }}</p>
+                  </div>
+                  <div class="notification-footer">
+                    <span class="notification-type" [ngClass]="getNotificationTypeClass(notification.notificationType)">
+                      {{ notification.notificationType }}
+                    </span>
+                    <button *ngIf="!notification.isRead" class="btn btn-sm btn-outline-primary" (click)="markNotificationAsRead(notification.id)">
+                      <i class="fas fa-check"></i> Marcar como leído
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <div *ngIf="!notifications || notifications.length === 0" class="text-center p-4">
+                <p>No hay notificaciones disponibles.</p>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,54 @@
+.card-status {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  background-color: rgba(255, 255, 255, 0.2);
+  margin-top: 1rem;
+  color: white;
+  font-weight: 600;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.status-icon {
+  margin-right: 0.5rem;
+}
+
+.status-text {
+  font-weight: 600;
+}
+
+.expiry-info {
+  margin-left: 0.75rem;
+  font-size: 0.8rem;
+  opacity: 0.9;
+}
+
+.expiry-warning {
+  color: #ffc107;
+  font-weight: 700;
+}
+
+.status-active {
+  background-color: rgba(40, 167, 69, 0.3);
+}
+
+.status-inactive {
+  background-color: rgba(220, 53, 69, 0.3);
+}
+
+.status-suspended {
+  background-color: rgba(255, 193, 7, 0.3);
+}
+
+.status-debt {
+  background-color: rgba(233, 30, 99, 0.3);
+}
+
+.status-pending {
+  background-color: rgba(0, 123, 255, 0.3);
+}
+
+.status-expired {
+  background-color: rgba(108, 117, 125, 0.3);
+}

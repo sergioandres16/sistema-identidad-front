@@ -1,0 +1,20 @@
+<div class="card-status" [ngClass]="getStatusClass()">
+  <span class="status-icon">
+    <i class="fas" [ngClass]="{
+      'fa-check-circle': status === 'ACTIVE',
+      'fa-times-circle': status === 'INACTIVE',
+      'fa-exclamation-circle': status === 'SUSPENDED',
+      'fa-dollar-sign': status === 'DEBT',
+      'fa-clock': status === 'PENDING',
+      'fa-calendar-times': isExpired()
+    }"></i>
+  </span>
+  <span class="status-text">{{ getStatusText() }}</span>
+
+  <div *ngIf="isActive && !isExpired() && expiryDate" class="expiry-info">
+    <span *ngIf="daysUntilExpiry() > 30">Vence en {{ daysUntilExpiry() }} días</span>
+    <span *ngIf="daysUntilExpiry() <= 30 && daysUntilExpiry() > 0" class="expiry-warning">
+      ¡Vence pronto! ({{ daysUntilExpiry() }} días)
+    </span>
+  </div>
+</div>

@@ -1,0 +1,62 @@
+.qr-generator {
+  text-align: center;
+}
+
+.qr-code {
+  display: inline-block;
+  position: relative;
+  border: 8px solid white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  background-color: #f8f9fa;
+
+  img {
+    display: block;
+  }
+}
+
+.qr-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.qr-countdown {
+  background-color: rgba(255, 255, 255, 0.8);
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  font-weight: bold;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.countdown-normal {
+  color: #28a745;
+}
+
+.countdown-warning {
+  color: #ffc107;
+}
+
+.countdown-danger {
+  color: #dc3545;
+}
+
+.qr-instructions {
+  margin-top: 1.25rem;
+  font-size: 0.9rem;
+  color: #6c757d;
+
+  p {
+    margin: 0;
+  }
+}

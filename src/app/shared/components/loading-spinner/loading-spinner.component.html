@@ -1,0 +1,14 @@
+<div class="spinner-container">
+  <div
+    class="spinner"
+    [ngClass]="{
+      'spinner-small': size === 'small',
+      'spinner-medium': size === 'medium',
+      'spinner-large': size === 'large',
+      'spinner-primary': color === 'primary',
+      'spinner-secondary': color === 'secondary',
+      'spinner-light': color === 'light',
+      'spinner-dark': color === 'dark'
+    }"
+  ></div>
+</div>
