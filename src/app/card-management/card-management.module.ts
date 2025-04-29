@@ -1,22 +1,34 @@
-import { NgModule }            from '@angular/core';
-import { CommonModule }        from '@angular/common';
-import { RouterModule, Routes} from '@angular/router';
-import { SharedModule }        from '../shared/shared.module';
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterModule, Routes } from '@angular/router';
+import { SharedModule } from '../shared/shared.module';
 
-/* stand-alone ↓ */
-import { IdCardComponent     } from './id-card/id-card.component';
+/* standalone components */
+import { IdCardComponent } from './id-card/id-card.component';
+import { CardStatusComponent } from './card-status/card-status.component';
+import { QrGeneratorComponent } from './qr-generator/qr-generator.component';
 
 const routes: Routes = [
-  { path: '', component: IdCardComponent }   // ejemplo: vista raíz
+  { path: '', component: IdCardComponent }   // vista raíz
 ];
 
 @NgModule({
-  declarations: [],              //  ←  NADA
+  declarations: [],  // Vacío porque todos los componentes son standalone
   imports: [
     CommonModule,
     SharedModule,
     RouterModule.forChild(routes),
-    IdCardComponent              //  👈 se **importa**, no se declara
+
+    // Importamos los componentes standalone
+    IdCardComponent,
+    CardStatusComponent,
+    QrGeneratorComponent
+  ],
+  exports: [
+    // Exportamos los componentes para que estén disponibles en otros módulos
+    IdCardComponent,
+    CardStatusComponent,
+    QrGeneratorComponent
   ]
 })
 export class CardManagementModule {}

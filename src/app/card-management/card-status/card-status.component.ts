@@ -1,11 +1,11 @@
 import { Component, OnInit, Input } from '@angular/core';
-import {CommonModule, NgClass, NgIf} from '@angular/common';
+import { CommonModule, NgClass, NgIf } from '@angular/common';
 
 @Component({
-  selector:    'app-card-status',
-  standalone:  true,
+  selector: 'app-card-status',
+  standalone: true,
   templateUrl: './card-status.component.html',
-  styleUrls:   ['./card-status.component.scss'],
+  styleUrls: ['./card-status.component.scss'],
   imports: [CommonModule, NgIf, NgClass]
 })
 export class CardStatusComponent implements OnInit {

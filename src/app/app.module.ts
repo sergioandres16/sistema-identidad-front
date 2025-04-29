@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import {ApplicationRef, NgModule} from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -12,7 +12,7 @@ import { ErrorInterceptorService } from './core/interceptors/error-interceptor.s
 
 @NgModule({
   declarations: [
-    AppComponent
+    // AppComponent is standalone, so it should NOT be declared here
   ],
   imports: [
     BrowserModule,
@@ -20,12 +20,21 @@ import { ErrorInterceptorService } from './core/interceptors/error-interceptor.s
     HttpClientModule,
     AppRoutingModule,
     CoreModule,
-    SharedModule
+    SharedModule,
+
+    // Import standalone components instead of declaring them
+    AppComponent
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptorService, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptorService, multi: true }
-  ],
-  bootstrap: [AppComponent]
+  ]
 })
-export class AppModule { }
+export class AppModule {
+  constructor(private applicationRef: ApplicationRef) {
+    const componentRef = document.querySelector('app-root');
+    if (componentRef) {
+      this.applicationRef.bootstrap(AppComponent);
+    }
+  }
+}

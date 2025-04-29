@@ -12,12 +12,14 @@ const routes: Routes = [
 
 @NgModule({
   declarations: [
+    // No declarations for standalone components
   ],
   imports: [
     CommonModule,
     RouterModule.forChild(routes),
     SharedModule,
     CardManagementModule,
+    // Import the standalone component
     DashboardComponent
   ]
 })

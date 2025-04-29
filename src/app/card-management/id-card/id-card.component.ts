@@ -1,22 +1,22 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import { CommonModule }      from '@angular/common';
-import { NgIf, NgFor, NgClass, NgStyle, DatePipe } from '@angular/common';
-import { CardStatusComponent }  from '../card-status/card-status.component';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { NgIf, NgClass, NgStyle, DatePipe } from '@angular/common';
+import { CardStatusComponent } from '../card-status/card-status.component';
 import { QrGeneratorComponent } from '../qr-generator/qr-generator.component';
 import { LoadingSpinnerComponent } from '../../shared/components/loading-spinner/loading-spinner.component';
-import {Card} from '../../core/models/card.model';
-import {interval, Subscription} from 'rxjs';
-import {CardService} from '../../core/services/card.service';
-import {AuthService} from '../../core/services/auth.service';
+import { Card } from '../../core/models/card.model';
+import { interval, Subscription } from 'rxjs';
+import { CardService } from '../../core/services/card.service';
+import { AuthService } from '../../core/services/auth.service';
 
 @Component({
-  selector:    'app-id-card',
-  standalone:  true,
+  selector: 'app-id-card',
+  standalone: true,
   templateUrl: './id-card.component.html',
-  styleUrls:   ['./id-card.component.scss'],
+  styleUrls: ['./id-card.component.scss'],
   imports: [
     /* Angular */
-    CommonModule, NgIf, NgFor, NgClass, NgStyle, DatePipe,
+    CommonModule, NgIf, NgClass, NgStyle, DatePipe,
     /* Propios */
     CardStatusComponent,
     QrGeneratorComponent,

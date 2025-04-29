@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgIf, NgFor, NgClass, DatePipe } from '@angular/common';
 import { interval, Subscription } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { User } from '../core/models/user.model';
@@ -9,13 +9,22 @@ import { UserService } from '../core/services/user.service';
 import { AccessLogService } from '../core/services/access-log.service';
 import { NotificationService } from '../core/services/notification.service';
 import { AuthService } from '../core/services/auth.service';
-import { CardManagementModule } from '../card-management/card-management.module';
-import { SharedModule } from '../shared/shared.module';
+import { LoadingSpinnerComponent } from '../shared/components/loading-spinner/loading-spinner.component';
+import { IdCardComponent } from '../card-management/id-card/id-card.component';
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   standalone: true,
+  imports: [
+    CommonModule,
+    NgIf,
+    NgFor,
+    NgClass,
+    DatePipe,
+    LoadingSpinnerComponent,
+    IdCardComponent
+  ],
   styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit, OnDestroy {

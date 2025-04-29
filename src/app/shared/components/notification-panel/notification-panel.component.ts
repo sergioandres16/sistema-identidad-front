@@ -1,17 +1,20 @@
-// src/app/shared/components/notification-panel/notification-panel.component.ts
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import {CommonModule, DatePipe, NgClass, NgFor, NgIf} from '@angular/common';
+import { CommonModule, DatePipe, NgClass, NgFor, NgIf } from '@angular/common';
 import { Notification } from '../../../core/models/notification.model';
 import { NotificationService } from '../../../core/services/notification.service';
 import { LoadingSpinnerComponent } from '../loading-spinner/loading-spinner.component';
 
 @Component({
-  selector:    'app-notification-panel',
-  standalone:  true,
+  selector: 'app-notification-panel',
+  standalone: true,
   templateUrl: './notification-panel.component.html',
-  styleUrls:   ['./notification-panel.component.scss'],
+  styleUrls: ['./notification-panel.component.scss'],
   imports: [
-    CommonModule, NgIf, NgFor, NgClass, DatePipe,
+    CommonModule,
+    NgIf,
+    NgFor,
+    NgClass,
+    DatePipe,
     LoadingSpinnerComponent
   ]
 })

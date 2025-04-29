@@ -1,11 +1,11 @@
 import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
-import {CommonModule, NgClass, NgIf} from '@angular/common';
+import { CommonModule, NgClass, NgIf } from '@angular/common';
 
 @Component({
-  selector:    'app-qr-generator',
-  standalone:  true,
+  selector: 'app-qr-generator',
+  standalone: true,
   templateUrl: './qr-generator.component.html',
-  styleUrls:   ['./qr-generator.component.scss'],
+  styleUrls: ['./qr-generator.component.scss'],
   imports: [CommonModule, NgIf, NgClass]
 })
 export class QrGeneratorComponent implements OnInit, OnChanges {
