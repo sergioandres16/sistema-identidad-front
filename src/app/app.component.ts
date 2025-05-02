@@ -1,9 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
-import { SharedModule } from './shared/shared.module';
-
-// Import standalone components used in the template
+import { RouterOutlet } from '@angular/router';
 import { HeaderComponent } from './shared/components/header/header.component';
 import { FooterComponent } from './shared/components/footer/footer.component';
 
@@ -11,16 +8,14 @@ import { FooterComponent } from './shared/components/footer/footer.component';
   selector: 'app-root',
   standalone: true,
   imports: [
-    CommonModule,
-    RouterModule,
+    CommonModule,    // NgIf, NgFor, etc.
+    RouterOutlet,    // <router-outlet>
     HeaderComponent,
     FooterComponent
   ],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit {
+export class AppComponent {
   title = 'SAETA Digital ID';
-
-  ngOnInit(): void {}
 }
