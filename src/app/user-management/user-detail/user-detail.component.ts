@@ -26,7 +26,6 @@ export class UserDetailComponent implements OnInit {
     const idParam = this.route.snapshot.paramMap.get('id');
     if (idParam) {
       this.userId = +idParam;
-      // Here you would load the user data when implementing the service
       this.loadUser();
     }
   }

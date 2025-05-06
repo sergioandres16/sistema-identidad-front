@@ -18,11 +18,12 @@ export class QrGeneratorComponent implements OnInit, OnChanges {
   ngOnInit(): void {}
 
   ngOnChanges(changes: SimpleChanges): void {
-    // Component will update when qrCodeData or countdown changes
   }
 
   getCountdownClass(): string {
-    if (this.countdown > 20) {
+    if (this.countdown <= 0) {
+      return 'countdown-danger countdown-updating';
+    } else if (this.countdown > 20) {
       return 'countdown-normal';
     } else if (this.countdown > 10) {
       return 'countdown-warning';

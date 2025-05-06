@@ -12,7 +12,7 @@ export interface QrValidationResponse {
   userStatus: string;
   statusColor: string;
   userRole: string;
-  profilePhoto: string;  // Base64 encoded
+  profilePhoto: string;
   accessGranted: boolean;
   reasonDenied: string;
   logId: number;

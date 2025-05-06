@@ -3,7 +3,7 @@
     <img [src]="'data:image/png;base64,' + qrCodeData" [width]="size" [height]="size" alt="QR Code" *ngIf="qrCodeData" />
     <div class="qr-overlay">
       <div class="qr-countdown" [ngClass]="getCountdownClass()">
-        {{ countdown }}
+        {{ countdown > 0 ? countdown : 'Actualizando...' }}
       </div>
     </div>
   </div>

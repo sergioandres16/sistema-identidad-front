@@ -6,7 +6,6 @@
     </div>
 
     <div class="auth-body">
-      <!-- User Type Selection -->
       <div class="user-type-selector">
         <div class="selector-label">Tipo de Usuario:</div>
         <div class="selector-options">
@@ -27,7 +26,6 @@
       </div>
 
       <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
-        <!-- Basic Information -->
         <div class="form-section">
           <h5>Información Básica</h5>
 
@@ -87,7 +85,6 @@
           </div>
         </div>
 
-        <!-- Specific Fields -->
         <ng-container *ngIf="selectedUserType === 'student'">
           <div class="form-section">
             <h5>Información de Estudiante</h5>
@@ -134,7 +131,6 @@
           </div>
         </ng-container>
 
-        <!-- Account Information -->
         <div class="form-section">
           <h5>Información de Cuenta</h5>
 

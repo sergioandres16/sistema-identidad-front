@@ -57,7 +57,6 @@ export class ScannerComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    // Inicializar ajustes del escáner
   }
 
   ngOnDestroy(): void {
@@ -75,10 +74,8 @@ export class ScannerComponent implements OnInit, OnDestroy {
       this.error = null;
       this.scanResult = null;
 
-      // Suscribirse a eventos del escáner
       this.scanSubscription = this.scanner.data.subscribe((result) => {
         if (result && result.length > 0 && result[0].value) {
-          // Procesar el resultado solo si es un token JWT válido
           const qrValue = result[0].value;
           console.log('QR detectado:', qrValue);
           this.onScanSuccess(qrValue);
@@ -102,13 +99,11 @@ export class ScannerComponent implements OnInit, OnDestroy {
   onScanSuccess(qrString: string): void {
     this.stopScanner();
 
-    // Limpiar el resultado si tiene prefijos comunes
     let tokenValue = qrString;
     const jwtPattern = /^(Bearer\s+)?([A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.?[A-Za-z0-9-_.+/=]*)$/;
 
     const match = qrString.match(jwtPattern);
     if (match) {
-      // Si hay un match, usar el grupo 2 que es el token real
       tokenValue = match[2];
     }
 
@@ -147,7 +142,6 @@ export class ScannerComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (result) => {
           if (this.scanResult) {
-            // Actualizar resultado del escaneo con el nuevo estado
             this.scanResult.userStatus = this.getStatusNameById(newStatusId);
           }
           this.isLoading = false;

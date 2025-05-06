@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import {Observable, retry, throwError} from 'rxjs';
 import { Card } from '../models/card.model';
 import { environment } from '../../../environments/environment';
 
@@ -37,7 +37,8 @@ export class CardService {
   }
 
   renewQrCode(id: number): Observable<string> {
-    return this.http.get<string>(`${this.apiUrl}/${id}/renew-qr`);
+    return this.http.get<string>(`${this.apiUrl}/${id}/renew-qr`,
+      { responseType: 'text' as 'json' }); // Cambiar el tipo de respuesta
   }
 
   validateCard(id: number): Observable<boolean> {

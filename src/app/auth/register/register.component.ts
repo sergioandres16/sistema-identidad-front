@@ -38,16 +38,13 @@ export class RegisterComponent implements OnInit {
       lastName: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.email]],
       phoneNumber: [''],
-      // Fields for student
       studentCode: [''],
       faculty: [''],
-      // Fields for club member
       membershipType: ['']
     }, { validator: this.passwordMatchValidator });
   }
 
   ngOnInit(): void {
-    // Redirect if already logged in
     if (this.authService.isLoggedIn) {
       this.router.navigate(['/dashboard']);
     }
@@ -61,7 +58,6 @@ export class RegisterComponent implements OnInit {
   onUserTypeChange(type: string): void {
     this.selectedUserType = type;
 
-    // Reset specific fields based on user type
     if (type !== 'student') {
       this.registerForm.get('studentCode')?.reset();
       this.registerForm.get('faculty')?.reset();
@@ -91,7 +87,6 @@ export class RegisterComponent implements OnInit {
       phoneNumber: formValue.phoneNumber || undefined
     };
 
-    // Add specific fields based on user type
     if (this.selectedUserType === 'student') {
       registerData.studentCode = formValue.studentCode;
       registerData.faculty = formValue.faculty;
@@ -103,7 +98,6 @@ export class RegisterComponent implements OnInit {
       .subscribe({
         next: () => {
           this.isLoading = false;
-          // Redirect to login with a success message
           this.router.navigate(['/auth/login']);
         },
         error: (err) => {

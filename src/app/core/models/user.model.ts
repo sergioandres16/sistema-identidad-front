@@ -5,7 +5,7 @@ export interface User {
   lastName: string;
   email: string;
   phoneNumber?: string;
-  profilePhoto?: string; // Base64 encoded
+  profilePhoto?: string;
   statusName?: string;
   statusColor?: string;
   roles?: string[];

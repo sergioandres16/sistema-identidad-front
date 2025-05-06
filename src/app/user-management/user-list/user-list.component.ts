@@ -15,13 +15,11 @@ import { User } from '../../core/models/user.model';
   styleUrls: ['./user-list.component.scss']
 })
 export class UserListComponent implements OnInit {
-  // aquí irá la lista de usuarios cuando la implementes
   users: User[] = [];
 
   constructor(private userService: UserService) {}
 
   ngOnInit(): void {
-    // Load users from the service
     this.loadUsers();
   }
 

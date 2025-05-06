@@ -1,7 +1,6 @@
 import { HttpInterceptorFn } from '@angular/common/http';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
-  // Accedemos al token del localStorage directamente
   const userDataString = localStorage.getItem('userData');
 
   if (!userDataString) {

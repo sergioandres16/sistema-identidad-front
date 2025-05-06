@@ -3,7 +3,7 @@ export interface Card {
   userId: number;
   firstName: string;
   lastName: string;
-  profilePhoto?: string; // Base64 encoded
+  profilePhoto?: string;
   cardNumber: string;
   issueDate: Date;
   expiryDate: Date;

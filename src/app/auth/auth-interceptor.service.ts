@@ -1,4 +1,3 @@
-// reemplaza todo el archivo
 import { Injectable } from '@angular/core';
 import {
   HttpEvent, HttpHandler, HttpInterceptor, HttpRequest
@@ -17,7 +16,9 @@ export class AuthInterceptorService implements HttpInterceptor {
       if (token) {
         req = req.clone({ setHeaders: { Authorization: `Bearer ${token}` } });
       }
-    } catch { /* ignoramos error de parseo */ }
+    } catch {
+
+    }
 
     return next.handle(req);
   }

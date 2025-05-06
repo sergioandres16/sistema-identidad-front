@@ -15,9 +15,7 @@ import { AuthService } from '../../core/services/auth.service';
   templateUrl: './id-card.component.html',
   styleUrls: ['./id-card.component.scss'],
   imports: [
-    /* Angular */
     CommonModule, NgIf, NgClass, NgStyle, DatePipe,
-    /* Propios */
     CardStatusComponent,
     QrGeneratorComponent,
     LoadingSpinnerComponent
@@ -29,7 +27,7 @@ export class IdCardComponent implements OnInit, OnDestroy {
   error: string | null = null;
   qrRefreshSubscription: Subscription | null = null;
   qrAutoRefresh = true;
-  qrCountdown = 30; // Seconds until QR refresh
+  qrCountdown = 30;
   currentQrCountdown = 30;
 
   constructor(
@@ -87,10 +85,12 @@ export class IdCardComponent implements OnInit, OnDestroy {
           }
           this.isLoading = false;
           this.currentQrCountdown = this.qrCountdown;
+          this.error = null;
         },
-        error: (err) => {
-          this.error = 'No se pudo renovar el código QR';
+        error: () => {
           this.isLoading = false;
+          this.currentQrCountdown = 30;
+          this.error = null;
         }
       });
   }
@@ -107,19 +107,24 @@ export class IdCardComponent implements OnInit, OnDestroy {
   }
 
   startQrAutoRefresh(): void {
-    // First unsubscribe if already subscribed
     if (this.qrRefreshSubscription) {
       this.qrRefreshSubscription.unsubscribe();
+      this.qrRefreshSubscription = null;
     }
 
-    // Create timer that ticks every second
     this.qrRefreshSubscription = interval(1000)
       .subscribe(() => {
         this.currentQrCountdown--;
 
         if (this.currentQrCountdown <= 0 && this.card && this.qrAutoRefresh) {
-          // Time to refresh QR code
-          this.renewQrCode();
+          if (!this.isLoading) {
+            this.renewQrCode();
+          }
+          else if (this.currentQrCountdown < -10) {
+            console.log('Forzando renovación de QR después de espera excesiva');
+            this.isLoading = false;
+            this.renewQrCode();
+          }
         }
       });
   }
@@ -141,5 +146,23 @@ export class IdCardComponent implements OnInit, OnDestroy {
       default:
         return '';
     }
+  }
+
+  getProfilePhotoUrl(): string {
+    if (!this.card) {
+      return '/assets/images/profile-placeholder.png';
+    }
+
+    if (this.card && this.card.profilePhoto) {
+      if (typeof this.card.profilePhoto === 'string' &&
+        this.card.profilePhoto.startsWith('data:image')) {
+        return this.card.profilePhoto;
+      }
+      else {
+        return 'data:image/jpeg;base64,' + this.card.profilePhoto;
+      }
+    }
+
+    return '/assets/images/profile-placeholder.png';
   }
 }

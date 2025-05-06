@@ -15,7 +15,6 @@ const routes: Routes = [
 
 @NgModule({
   declarations: [
-    // No declarations since LoginComponent and RegisterComponent are standalone
   ],
   imports: [
     CommonModule,
@@ -23,7 +22,6 @@ const routes: Routes = [
     ReactiveFormsModule,
     RouterModule.forChild(routes),
     SharedModule,
-    // Import standalone components
     LoginComponent,
     RegisterComponent
   ]

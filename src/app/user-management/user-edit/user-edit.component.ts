@@ -26,19 +26,15 @@ export class UserEditComponent implements OnInit {
     private userService: UserService,
     private formBuilder: FormBuilder
   ) {
-    // Initialize the form with empty values
     this.userForm = this.formBuilder.group({
-      // Define your form controls here
       firstName: [''],
       lastName: [''],
       email: [''],
-      // Add more fields as needed
     });
   }
 
   ngOnInit(): void {
     this.userId = +this.route.snapshot.paramMap.get('id')!;
-    // Here you would load the user data when implementing the service
     this.loadUser();
   }
 
@@ -47,12 +43,10 @@ export class UserEditComponent implements OnInit {
       .subscribe({
         next: (user) => {
           this.user = user;
-          // Populate the form with user data
           this.userForm.patchValue({
             firstName: user.firstName,
             lastName: user.lastName,
             email: user.email
-            // Add more fields as needed
           });
         },
         error: (err) => {

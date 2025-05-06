@@ -105,7 +105,6 @@ export class AuthService {
       if (loadedUser.token) {
         const expirationDate = new Date(_tokenExpirationDate);
 
-        // Comprobar si el token no ha expirado
         if (expirationDate > new Date()) {
           this.currentUserSubject.next(loadedUser);
           const expirationDuration = expirationDate.getTime() - new Date().getTime();
@@ -168,7 +167,6 @@ export class AuthService {
     role: string,
     token: string
   ) {
-    // JWT típicamente expira en 24 horas
     const expirationDate = new Date(new Date().getTime() + 24 * 60 * 60 * 1000);
 
     const user = {
