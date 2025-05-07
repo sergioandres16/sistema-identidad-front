@@ -14,7 +14,6 @@ export class AccessLogService {
 
   constructor(private http: HttpClient) {}
 
-  // En access-log.service.ts
   validateQrCode(qrToken: string, zoneId: number, scannerId: string, scannerLocation: string): Observable<QrValidationResponse> {
     const request: QrValidationRequest = {
       qrToken,
@@ -24,6 +23,20 @@ export class AccessLogService {
     };
 
     return this.http.post<QrValidationResponse>(`${this.apiUrl}/validate-qr`, request);
+  }
+
+  // NUEVA FUNCIÓN: Para activar manualmente un carnet por Admin o Scanner
+  activateUserCard(userId: number, zoneId: number, scannerId: string, scannerLocation: string): Observable<QrValidationResponse> {
+    let params = new HttpParams()
+      .set('userId', userId.toString())
+      .set('zoneId', zoneId.toString())
+      .set('scannerId', scannerId)
+      .set('scannerLocation', scannerLocation);
+
+    return this.http.post<QrValidationResponse>(`${this.apiUrl}/activate-card`, {}, { params })
+      .pipe(
+        catchError(this.handleError)
+      );
   }
 
   changeUserStatusOnAccess(
@@ -70,10 +83,7 @@ export class AccessLogService {
       );
   }
 
-  // Esta función sería ideal, pero no existe un endpoint específico para esto en el backend
   getLogById(id: number): Observable<AccessLog> {
-    // Esta es una implementación simulada, ya que no existe el endpoint directamente
-    // En un caso real, podríamos implementarlo o extender el backend
     return this.http.get<AccessLog>(`${this.apiUrl}/${id}`)
       .pipe(
         catchError(this.handleError)

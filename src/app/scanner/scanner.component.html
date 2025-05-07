@@ -71,6 +71,13 @@
         {{ statusChangeMessage }}
       </div>
 
+      <!-- DEPURACIÓN: Solo visible en desarrollo -->
+      <div *ngIf="debug && cardDetails" class="debug-info">
+        <p>Carnet cargado: {{ cardDetails.isActive ? 'Activo' : 'Inactivo' }}</p>
+        <p>Usuario: {{ cardDetails.userId }} / {{ cardDetails.firstName }} {{ cardDetails.lastName }}</p>
+        <p>Expiración: {{ cardDetails.expiryDate | date:'dd/MM/yyyy HH:mm' }}</p>
+      </div>
+
       <div *ngIf="scanResult" class="scan-result" [ngClass]="getAccessResultClass()">
         <div class="result-header">
           <h3>Resultado de Escaneo</h3>
@@ -98,8 +105,28 @@
               <span [ngClass]="getUserStatusClass()">{{ scanResult.userStatus }}</span>
             </p>
 
+            <!-- Mostrar información del carnet cuando está disponible -->
+            <div *ngIf="cardDetails" class="card-info">
+              <p>Carnet: {{ cardDetails.cardNumber }}</p>
+              <p>Estado: <span [ngClass]="{'status-active': cardDetails.isActive, 'status-inactive': !cardDetails.isActive}">
+                {{ cardDetails.isActive ? 'Activo' : 'Inactivo' }}
+              </span></p>
+              <p>Válido hasta: {{ cardDetails.expiryDate | date:'dd/MM/yyyy HH:mm' }}</p>
+            </div>
+
             <div *ngIf="!scanResult.accessGranted" class="deny-reason">
               <p>Motivo: {{ scanResult.reasonDenied }}</p>
+            </div>
+
+            <!-- Mensaje claro cuando el carnet está inactivo y el usuario es admin/scanner -->
+            <div *ngIf="canActivateCards() && (needsActivation() || (cardDetails && !cardDetails.isActive))" class="activation-alert">
+              <p><i class="fas fa-exclamation-triangle"></i> Este carnet requiere activación</p>
+              <button
+                class="btn btn-success btn-block"
+                (click)="activateUserCard()"
+                [disabled]="statusChanging">
+                <i class="fas fa-check-circle"></i> Activar Carnet (8 horas)
+              </button>
             </div>
 
             <div *ngIf="autoScanTimer !== null" class="auto-reset-timer">
@@ -109,18 +136,21 @@
         </div>
 
         <div class="result-actions">
+          <!-- Botón de activación solo para admin/scanner y visible cuando el carnet está inactivo -->
           <button
             class="btn btn-success"
-            (click)="changeUserStatus(scanResult.userId, 1)"
-            *ngIf="scanResult.userStatus !== 'ACTIVE'"
+            (click)="activateUserCard()"
+            *ngIf="canActivateCards() && ((scanResult.userStatus !== 'ACTIVE') || (cardDetails && !cardDetails.isActive))"
             [disabled]="statusChanging"
           >
-            <i class="fas fa-check-circle"></i> Activar Usuario
+            <i class="fas fa-check-circle"></i> Activar Carnet
           </button>
+
+          <!-- Botones de cambio de estado -->
           <button
             class="btn btn-warning"
             (click)="changeUserStatus(scanResult.userId, 3)"
-            *ngIf="scanResult.userStatus !== 'SUSPENDED'"
+            *ngIf="canActivateCards() && scanResult.userStatus !== 'SUSPENDED'"
             [disabled]="statusChanging"
           >
             <i class="fas fa-exclamation-triangle"></i> Suspender Usuario
@@ -128,7 +158,7 @@
           <button
             class="btn btn-danger"
             (click)="changeUserStatus(scanResult.userId, 2)"
-            *ngIf="scanResult.userStatus !== 'INACTIVE'"
+            *ngIf="canActivateCards() && scanResult.userStatus !== 'INACTIVE'"
             [disabled]="statusChanging"
           >
             <i class="fas fa-times-circle"></i> Desactivar Usuario

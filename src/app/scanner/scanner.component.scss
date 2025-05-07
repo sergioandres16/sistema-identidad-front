@@ -419,3 +419,63 @@
     color: #6c757d;
   }
 }
+/* Estilo para alerta de activación manual */
+.activation-alert {
+  margin-top: 1rem;
+  padding: 1rem;
+  background-color: #fff3cd;
+  border-radius: 8px;
+  border-left: 4px solid #ffc107;
+  color: #664d03;
+  text-align: center;
+
+  p {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+
+    i {
+      margin-right: 0.5rem;
+      font-size: 1.2rem;
+    }
+  }
+
+  .btn-success {
+    margin-top: 0.5rem;
+    background-color: #198754;
+    border-color: #198754;
+    color: white;
+    padding: 0.5rem 1rem;
+
+    &:hover:not(:disabled) {
+      background-color: #157347;
+      border-color: #146c43;
+    }
+
+    &:disabled {
+      opacity: 0.65;
+      cursor: not-allowed;
+    }
+
+    i {
+      margin-right: 0.5rem;
+    }
+  }
+}
+
+/* Estilo informativo opcional (no crítico si no lo usas) */
+.activation-info {
+  margin-top: 1rem;
+  padding: 0.75rem;
+  background-color: #d1e7dd;
+  border-radius: 4px;
+  color: #0f5132;
+  font-weight: 500;
+  text-align: center;
+
+  .expiry-time {
+    font-weight: 700;
+  }
+}
