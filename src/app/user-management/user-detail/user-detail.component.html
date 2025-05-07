@@ -1,10 +1,79 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Title</title>
-</head>
-<body>
+<!-- src/app/user-management/user-detail/user-detail.component.html -->
+<div class="user-detail-container">
+  <div class="card">
+    <div class="card-header">
+      <h2>Detalle del Usuario</h2>
+      <button class="btn btn-primary" (click)="onEdit()">
+        <i class="fas fa-edit"></i> Editar
+      </button>
+    </div>
 
-</body>
-</html>
+    <div class="card-body">
+      <ng-container *ngIf="isLoading">
+        <div class="text-center p-4">
+          <app-loading-spinner></app-loading-spinner>
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="error">
+        <div class="alert alert-danger">
+          {{ error }}
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="user && !isLoading">
+        <div class="user-info">
+          <div class="profile-image">
+            <img [src]="getProfilePhotoUrl()" alt="Foto de perfil">
+          </div>
+
+          <div class="user-details">
+            <h3>{{ user.firstName }} {{ user.lastName }}</h3>
+            <p class="user-username">{{'@' + user.username }}</p>
+            <p class="user-email">{{ user.email }}</p>
+
+            <div class="user-status" *ngIf="user.statusName" [ngClass]="getStatusClass()">
+              {{ user.statusName }}
+            </div>
+
+            <div class="roles-badges" *ngIf="user.roles && user.roles.length > 0">
+              <span class="badge" *ngFor="let role of user.roles">{{ role }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="user-additional-info">
+          <div class="info-group">
+            <h4>Información de Contacto</h4>
+            <p><strong>Teléfono:</strong> {{ user.phoneNumber || 'No registrado' }}</p>
+          </div>
+
+          <div class="info-group" *ngIf="user.studentCode || user.faculty">
+            <h4>Información Académica</h4>
+            <p *ngIf="user.studentCode"><strong>Código de Estudiante:</strong> {{ user.studentCode }}</p>
+            <p *ngIf="user.faculty"><strong>Facultad:</strong> {{ user.faculty }}</p>
+          </div>
+
+          <div class="info-group" *ngIf="user.membershipType || user.membershipExpiry">
+            <h4>Información de Membresía</h4>
+            <p *ngIf="user.membershipType"><strong>Tipo de Membresía:</strong> {{ user.membershipType }}</p>
+            <p *ngIf="user.membershipExpiry"><strong>Expiración:</strong> {{ user.membershipExpiry }}</p>
+            <p *ngIf="user.hasDebt" class="debt-warning">
+              <i class="fas fa-exclamation-triangle"></i> Este usuario tiene deuda pendiente
+            </p>
+          </div>
+        </div>
+
+        <div class="card-info" *ngIf="!isCardLoading && card">
+          <h4>Información de Carnet Digital</h4>
+          <div class="card-details">
+            <p><strong>Número de Carnet:</strong> {{ card.cardNumber }}</p>
+            <p><strong>Emitido:</strong> {{ card.issueDate }}</p>
+            <p><strong>Válido hasta:</strong> {{ card.expiryDate }}</p>
+            <p><strong>Estado:</strong> {{ card.isActive ? 'Activo' : 'Inactivo' }}</p>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</div>

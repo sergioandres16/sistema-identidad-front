@@ -1,5 +1,226 @@
-<h2>Editar usuario #{{ userId }}</h2>
+<!-- src/app/user-management/user-edit/user-edit.component.html -->
+<div class="user-edit-container">
+  <div class="card">
+    <div class="card-header">
+      <h2>Editar Usuario</h2>
+      <div class="header-actions">
+        <button class="btn btn-outline-secondary" (click)="onCancel()">
+          <i class="fas fa-times"></i> Cancelar
+        </button>
+        <button class="btn btn-primary" (click)="onSubmit()" [disabled]="isSaving">
+          <i class="fas fa-save"></i> Guardar
+        </button>
+      </div>
+    </div>
 
-<form (ngSubmit)="save()">
-  <button type="submit" class="btn btn-primary">Guardar</button>
-</form>
+    <div class="card-body">
+      <ng-container *ngIf="isLoading">
+        <div class="text-center p-4">
+          <app-loading-spinner></app-loading-spinner>
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="error">
+        <div class="alert alert-danger">
+          {{ error }}
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="successMessage">
+        <div class="alert alert-success">
+          {{ successMessage }}
+        </div>
+      </ng-container>
+
+      <form [formGroup]="userForm" *ngIf="!isLoading" (ngSubmit)="onSubmit()">
+        <div class="form-section">
+          <h4>Información Básica</h4>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="username">Nombre de Usuario</label>
+              <input
+                type="text"
+                id="username"
+                formControlName="username"
+                class="form-control"
+                [ngClass]="{'is-invalid': userForm.get('username')?.invalid && userForm.get('username')?.touched}"
+              >
+              <div *ngIf="userForm.get('username')?.invalid && userForm.get('username')?.touched" class="invalid-feedback">
+                <span *ngIf="userForm.get('username')?.errors?.['required']">El nombre de usuario es requerido</span>
+                <span *ngIf="userForm.get('username')?.errors?.['minlength']">El nombre de usuario debe tener al menos 3 caracteres</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="firstName">Nombre</label>
+              <input
+                type="text"
+                id="firstName"
+                formControlName="firstName"
+                class="form-control"
+                [ngClass]="{'is-invalid': userForm.get('firstName')?.invalid && userForm.get('firstName')?.touched}"
+              >
+              <div *ngIf="userForm.get('firstName')?.invalid && userForm.get('firstName')?.touched" class="invalid-feedback">
+                El nombre es requerido
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="lastName">Apellido</label>
+              <input
+                type="text"
+                id="lastName"
+                formControlName="lastName"
+                class="form-control"
+                [ngClass]="{'is-invalid': userForm.get('lastName')?.invalid && userForm.get('lastName')?.touched}"
+              >
+              <div *ngIf="userForm.get('lastName')?.invalid && userForm.get('lastName')?.touched" class="invalid-feedback">
+                El apellido es requerido
+              </div>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="email">Correo Electrónico</label>
+              <input
+                type="email"
+                id="email"
+                formControlName="email"
+                class="form-control"
+                [ngClass]="{'is-invalid': userForm.get('email')?.invalid && userForm.get('email')?.touched}"
+              >
+              <div *ngIf="userForm.get('email')?.invalid && userForm.get('email')?.touched" class="invalid-feedback">
+                <span *ngIf="userForm.get('email')?.errors?.['required']">El correo electrónico es requerido</span>
+                <span *ngIf="userForm.get('email')?.errors?.['email']">Ingrese un correo electrónico válido</span>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="phoneNumber">Teléfono</label>
+              <input
+                type="tel"
+                id="phoneNumber"
+                formControlName="phoneNumber"
+                class="form-control"
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <h4>Información Académica</h4>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="studentCode">Código de Estudiante</label>
+              <input
+                type="text"
+                id="studentCode"
+                formControlName="studentCode"
+                class="form-control"
+              >
+            </div>
+
+            <div class="form-group">
+              <label for="faculty">Facultad</label>
+              <input
+                type="text"
+                id="faculty"
+                formControlName="faculty"
+                class="form-control"
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <h4>Información de Membresía</h4>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="membershipType">Tipo de Membresía</label>
+              <select
+                id="membershipType"
+                formControlName="membershipType"
+                class="form-control"
+              >
+                <option value="">Ninguna</option>
+                <option value="basic">Básica</option>
+                <option value="premium">Premium</option>
+                <option value="family">Familiar</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="membershipExpiry">Fecha de Expiración</label>
+              <input
+                type="date"
+                id="membershipExpiry"
+                formControlName="membershipExpiry"
+                class="form-control"
+              >
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="form-check">
+              <input
+                type="checkbox"
+                id="hasDebt"
+                formControlName="hasDebt"
+                class="form-check-input"
+              >
+              <label for="hasDebt" class="form-check-label">Tiene deuda pendiente</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <h4>Configuración de la Cuenta</h4>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="statusId">Estado</label>
+              <select
+                id="statusId"
+                formControlName="statusId"
+                class="form-control"
+              >
+                <option *ngFor="let status of statuses" [value]="status.id">{{ status.name }}</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>Roles</label>
+              <div class="roles-checkboxes">
+                <div *ngFor="let role of roles" class="form-check">
+                  <input
+                    type="checkbox"
+                    [id]="role"
+                    [value]="role"
+                    [checked]="isRoleSelected(role)"
+                    (change)="updateRoleSelection(role, $event)"
+                    class="form-check-input"
+                  >
+                  <label [for]="role" class="form-check-label">{{ role }}</label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="btn btn-outline-secondary" (click)="onCancel()">Cancelar</button>
+          <button type="submit" class="btn btn-primary" [disabled]="isSaving">
+            <app-loading-spinner *ngIf="isSaving" size="small" color="light"></app-loading-spinner>
+            <span *ngIf="!isSaving">Guardar Cambios</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

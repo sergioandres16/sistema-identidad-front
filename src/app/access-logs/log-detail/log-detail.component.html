@@ -1,10 +1,68 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Title</title>
-</head>
-<body>
+<!-- src/app/access-logs/log-detail/log-detail.component.html -->
+<div class="log-detail-container">
+  <div class="card">
+    <div class="card-header">
+      <h2>Detalle de Acceso</h2>
+      <button class="btn btn-outline-primary" (click)="goBack()">
+        <i class="fas fa-arrow-left"></i> Volver al Listado
+      </button>
+    </div>
 
-</body>
-</html>
+    <div class="card-body">
+      <ng-container *ngIf="isLoading">
+        <div class="text-center p-4">
+          <app-loading-spinner></app-loading-spinner>
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="error">
+        <div class="alert alert-danger">
+          {{ error }}
+        </div>
+        <div class="text-center mt-4">
+          <button class="btn btn-primary" (click)="goBack()">
+            Volver al Listado
+          </button>
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="log && !isLoading">
+        <div class="log-status" [ngClass]="getAccessStatusClass(log.accessGranted)">
+          <span *ngIf="log.accessGranted"><i class="fas fa-check-circle"></i> Acceso Concedido</span>
+          <span *ngIf="!log.accessGranted"><i class="fas fa-times-circle"></i> Acceso Denegado</span>
+        </div>
+
+        <div class="log-info">
+          <div class="info-section">
+            <h4>Información General</h4>
+            <div class="info-group">
+              <p><strong>ID de Registro:</strong> {{ log.id }}</p>
+              <p><strong>Fecha y Hora:</strong> {{ log.accessTime | date:'dd/MM/yyyy HH:mm:ss' }}</p>
+              <p><strong>Tipo de Acceso:</strong> {{ log.accessType }}</p>
+              <p *ngIf="!log.accessGranted"><strong>Motivo de Denegación:</strong> {{ log.reasonDenied || 'No especificado' }}</p>
+            </div>
+          </div>
+
+          <div class="info-section">
+            <h4>Información de Usuario</h4>
+            <div class="info-group">
+              <p><strong>ID de Usuario:</strong> {{ log.userId }}</p>
+              <p><strong>Nombre:</strong> {{ log.userName }}</p>
+              <p *ngIf="log.previousStatus"><strong>Estado Anterior:</strong> {{ log.previousStatus }}</p>
+              <p *ngIf="log.updatedStatus"><strong>Estado Actualizado:</strong> {{ log.updatedStatus }}</p>
+            </div>
+          </div>
+
+          <div class="info-section">
+            <h4>Información de Ubicación</h4>
+            <div class="info-group">
+              <p><strong>Zona:</strong> {{ log.zoneName || 'No especificada' }}</p>
+              <p><strong>ID de Escáner:</strong> {{ log.scannerId || 'No especificado' }}</p>
+              <p><strong>Ubicación del Escáner:</strong> {{ log.scannerLocation || 'No especificada' }}</p>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</div>

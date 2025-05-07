@@ -1,3 +1,4 @@
+<!-- src/app/scanner/scanner.component.html -->
 <div class="scanner-container">
   <div class="card">
     <div class="card-header">
@@ -23,6 +24,15 @@
             <div class="form-group">
               <label for="scannerLocation">Ubicación</label>
               <input type="text" id="scannerLocation" formControlName="scannerLocation" class="form-control">
+            </div>
+
+            <div class="form-group auto-reset-option">
+              <div class="form-check">
+                <input type="checkbox" id="autoReset" formControlName="autoReset" class="form-check-input">
+                <label for="autoReset" class="form-check-label">
+                  {{ getAutoResetText() }}
+                </label>
+              </div>
             </div>
           </div>
         </form>
@@ -57,6 +67,10 @@
         {{ error }}
       </div>
 
+      <div *ngIf="statusChangeMessage" class="alert" [ngClass]="{'alert-success': statusChangeSuccess, 'alert-danger': statusChangeSuccess === false}">
+        {{ statusChangeMessage }}
+      </div>
+
       <div *ngIf="scanResult" class="scan-result" [ngClass]="getAccessResultClass()">
         <div class="result-header">
           <h3>Resultado de Escaneo</h3>
@@ -87,20 +101,43 @@
             <div *ngIf="!scanResult.accessGranted" class="deny-reason">
               <p>Motivo: {{ scanResult.reasonDenied }}</p>
             </div>
+
+            <div *ngIf="autoScanTimer !== null" class="auto-reset-timer">
+              <p>Reinicio automático en {{ autoScanTimer }} segundos</p>
+            </div>
           </div>
         </div>
 
         <div class="result-actions">
-          <button class="btn btn-success" (click)="changeUserStatus(scanResult.userId, 1)" *ngIf="scanResult.userStatus !== 'ACTIVE'">
+          <button
+            class="btn btn-success"
+            (click)="changeUserStatus(scanResult.userId, 1)"
+            *ngIf="scanResult.userStatus !== 'ACTIVE'"
+            [disabled]="statusChanging"
+          >
             <i class="fas fa-check-circle"></i> Activar Usuario
           </button>
-          <button class="btn btn-warning" (click)="changeUserStatus(scanResult.userId, 3)" *ngIf="scanResult.userStatus !== 'SUSPENDED'">
+          <button
+            class="btn btn-warning"
+            (click)="changeUserStatus(scanResult.userId, 3)"
+            *ngIf="scanResult.userStatus !== 'SUSPENDED'"
+            [disabled]="statusChanging"
+          >
             <i class="fas fa-exclamation-triangle"></i> Suspender Usuario
           </button>
-          <button class="btn btn-danger" (click)="changeUserStatus(scanResult.userId, 2)" *ngIf="scanResult.userStatus !== 'INACTIVE'">
+          <button
+            class="btn btn-danger"
+            (click)="changeUserStatus(scanResult.userId, 2)"
+            *ngIf="scanResult.userStatus !== 'INACTIVE'"
+            [disabled]="statusChanging"
+          >
             <i class="fas fa-times-circle"></i> Desactivar Usuario
           </button>
-          <button class="btn btn-primary" (click)="resetScanner()">
+          <button
+            class="btn btn-primary"
+            (click)="resetScanner()"
+            [disabled]="statusChanging"
+          >
             <i class="fas fa-redo"></i> Escanear Otro
           </button>
         </div>

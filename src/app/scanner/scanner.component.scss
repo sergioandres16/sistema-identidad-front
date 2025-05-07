@@ -396,3 +396,26 @@
     }
   }
 }
+/* Actualizaciones al archivo src/app/scanner/scanner.component.scss */
+.auto-reset-option {
+  display: flex;
+  align-items: flex-end;
+
+  .form-check {
+    padding-top: 1.5rem;
+  }
+}
+
+.auto-reset-timer {
+  margin-top: 0.5rem;
+  padding: 0.5rem;
+  background-color: rgba(0, 0, 0, 0.05);
+  border-radius: 4px;
+  font-size: 0.9rem;
+  text-align: center;
+
+  p {
+    margin: 0;
+    color: #6c757d;
+  }
+}
