@@ -1,4 +1,3 @@
-// src/app/core/services/access-log.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
@@ -15,12 +14,8 @@ export class AccessLogService {
 
   constructor(private http: HttpClient) {}
 
-  validateQrCode(
-    qrToken: string,
-    zoneId: number,
-    scannerId: string,
-    scannerLocation: string
-  ): Observable<QrValidationResponse> {
+  // En access-log.service.ts
+  validateQrCode(qrToken: string, zoneId: number, scannerId: string, scannerLocation: string): Observable<QrValidationResponse> {
     const request: QrValidationRequest = {
       qrToken,
       zoneId,
@@ -28,10 +23,7 @@ export class AccessLogService {
       scannerLocation
     };
 
-    return this.http.post<QrValidationResponse>(`${this.apiUrl}/validate-qr`, request)
-      .pipe(
-        catchError(this.handleError)
-      );
+    return this.http.post<QrValidationResponse>(`${this.apiUrl}/validate-qr`, request);
   }
 
   changeUserStatusOnAccess(

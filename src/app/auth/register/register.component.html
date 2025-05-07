@@ -6,30 +6,40 @@
     </div>
 
     <div class="auth-body">
+      <!-- Selector de tipo de usuario -->
       <div class="user-type-selector">
         <div class="selector-label">Tipo de Usuario:</div>
         <div class="selector-options">
           <div
             *ngFor="let type of userTypes"
             class="selector-option"
-            [ngClass]="{'selected': selectedUserType === type}"
+            [ngClass]="{ selected: selectedUserType === type }"
             (click)="onUserTypeChange(type)"
           >
             <div class="option-radio">
               <div class="radio-inner" *ngIf="selectedUserType === type"></div>
             </div>
             <div class="option-label">
-              {{ type === 'general' ? 'General' : type === 'student' ? 'Estudiante' : 'Miembro' }}
+              {{
+                type === 'general'
+                  ? 'General'
+                  : type === 'student'
+                    ? 'Estudiante'
+                    : 'Miembro'
+              }}
             </div>
           </div>
         </div>
       </div>
 
+      <!-- Formulario -->
       <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+        <!-- SECCIÓN: Información básica -->
         <div class="form-section">
           <h5>Información Básica</h5>
 
           <div class="form-row">
+            <!-- Nombre -->
             <div class="form-group">
               <label for="firstName">Nombre</label>
               <input
@@ -37,13 +47,24 @@
                 id="firstName"
                 formControlName="firstName"
                 class="form-control"
-                [ngClass]="{'is-invalid': registerForm.get('firstName')?.invalid && registerForm.get('firstName')?.touched}"
+                [ngClass]="{
+                  'is-invalid':
+                    registerForm.get('firstName')?.invalid &&
+                    registerForm.get('firstName')?.touched
+                }"
               />
-              <div *ngIf="registerForm.get('firstName')?.invalid && registerForm.get('firstName')?.touched" class="invalid-feedback">
+              <div
+                *ngIf="
+                  registerForm.get('firstName')?.invalid &&
+                  registerForm.get('firstName')?.touched
+                "
+                class="invalid-feedback"
+              >
                 El nombre es requerido
               </div>
             </div>
 
+            <!-- Apellido -->
             <div class="form-group">
               <label for="lastName">Apellido</label>
               <input
@@ -51,14 +72,25 @@
                 id="lastName"
                 formControlName="lastName"
                 class="form-control"
-                [ngClass]="{'is-invalid': registerForm.get('lastName')?.invalid && registerForm.get('lastName')?.touched}"
+                [ngClass]="{
+                  'is-invalid':
+                    registerForm.get('lastName')?.invalid &&
+                    registerForm.get('lastName')?.touched
+                }"
               />
-              <div *ngIf="registerForm.get('lastName')?.invalid && registerForm.get('lastName')?.touched" class="invalid-feedback">
+              <div
+                *ngIf="
+                  registerForm.get('lastName')?.invalid &&
+                  registerForm.get('lastName')?.touched
+                "
+                class="invalid-feedback"
+              >
                 El apellido es requerido
               </div>
             </div>
           </div>
 
+          <!-- Correo -->
           <div class="form-group">
             <label for="email">Correo Electrónico</label>
             <input
@@ -66,14 +98,29 @@
               id="email"
               formControlName="email"
               class="form-control"
-              [ngClass]="{'is-invalid': registerForm.get('email')?.invalid && registerForm.get('email')?.touched}"
+              [ngClass]="{
+                'is-invalid':
+                  registerForm.get('email')?.invalid &&
+                  registerForm.get('email')?.touched
+              }"
             />
-            <div *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched" class="invalid-feedback">
-              <span *ngIf="registerForm.get('email')?.errors?.['required']">El correo electrónico es requerido</span>
-              <span *ngIf="registerForm.get('email')?.errors?.['email']">Ingrese un correo electrónico válido</span>
+            <div
+              *ngIf="
+                registerForm.get('email')?.invalid &&
+                registerForm.get('email')?.touched
+              "
+              class="invalid-feedback"
+            >
+              <span *ngIf="registerForm.get('email')?.errors?.['required']">
+                El correo electrónico es requerido
+              </span>
+              <span *ngIf="registerForm.get('email')?.errors?.['email']">
+                Ingrese un correo electrónico válido
+              </span>
             </div>
           </div>
 
+          <!-- Teléfono -->
           <div class="form-group">
             <label for="phoneNumber">Teléfono (Opcional)</label>
             <input
@@ -85,6 +132,7 @@
           </div>
         </div>
 
+        <!-- SECCIÓN: Datos de estudiante -->
         <ng-container *ngIf="selectedUserType === 'student'">
           <div class="form-section">
             <h5>Información de Estudiante</h5>
@@ -111,6 +159,7 @@
           </div>
         </ng-container>
 
+        <!-- SECCIÓN: Datos de miembro -->
         <ng-container *ngIf="selectedUserType === 'member'">
           <div class="form-section">
             <h5>Información de Membresía</h5>
@@ -131,9 +180,11 @@
           </div>
         </ng-container>
 
+        <!-- SECCIÓN: Datos de cuenta -->
         <div class="form-section">
           <h5>Información de Cuenta</h5>
 
+          <!-- Username -->
           <div class="form-group">
             <label for="username">Nombre de Usuario</label>
             <input
@@ -141,15 +192,32 @@
               id="username"
               formControlName="username"
               class="form-control"
-              [ngClass]="{'is-invalid': registerForm.get('username')?.invalid && registerForm.get('username')?.touched}"
+              [ngClass]="{
+                'is-invalid':
+                  registerForm.get('username')?.invalid &&
+                  registerForm.get('username')?.touched
+              }"
             />
-            <div *ngIf="registerForm.get('username')?.invalid && registerForm.get('username')?.touched" class="invalid-feedback">
-              <span *ngIf="registerForm.get('username')?.errors?.['required']">El nombre de usuario es requerido</span>
-              <span *ngIf="registerForm.get('username')?.errors?.['minlength']">El nombre de usuario debe tener al menos 3 caracteres</span>
-              <span *ngIf="registerForm.get('username')?.errors?.['maxlength']">El nombre de usuario no debe exceder los 20 caracteres</span>
+            <div
+              *ngIf="
+                registerForm.get('username')?.invalid &&
+                registerForm.get('username')?.touched
+              "
+              class="invalid-feedback"
+            >
+              <span *ngIf="registerForm.get('username')?.errors?.['required']">
+                El nombre de usuario es requerido
+              </span>
+              <span *ngIf="registerForm.get('username')?.errors?.['minlength']">
+                El nombre de usuario debe tener al menos 3 caracteres
+              </span>
+              <span *ngIf="registerForm.get('username')?.errors?.['maxlength']">
+                El nombre de usuario no debe exceder los 20 caracteres
+              </span>
             </div>
           </div>
 
+          <!-- Password -->
           <div class="form-group">
             <label for="password">Contraseña</label>
             <input
@@ -157,14 +225,29 @@
               id="password"
               formControlName="password"
               class="form-control"
-              [ngClass]="{'is-invalid': registerForm.get('password')?.invalid && registerForm.get('password')?.touched}"
+              [ngClass]="{
+                'is-invalid':
+                  registerForm.get('password')?.invalid &&
+                  registerForm.get('password')?.touched
+              }"
             />
-            <div *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched" class="invalid-feedback">
-              <span *ngIf="registerForm.get('password')?.errors?.['required']">La contraseña es requerida</span>
-              <span *ngIf="registerForm.get('password')?.errors?.['minlength']">La contraseña debe tener al menos 6 caracteres</span>
+            <div
+              *ngIf="
+                registerForm.get('password')?.invalid &&
+                registerForm.get('password')?.touched
+              "
+              class="invalid-feedback"
+            >
+              <span *ngIf="registerForm.get('password')?.errors?.['required']">
+                La contraseña es requerida
+              </span>
+              <span *ngIf="registerForm.get('password')?.errors?.['minlength']">
+                La contraseña debe tener al menos 6 caracteres
+              </span>
             </div>
           </div>
 
+          <!-- Confirm password -->
           <div class="form-group">
             <label for="confirmPassword">Confirmar Contraseña</label>
             <input
@@ -172,32 +255,65 @@
               id="confirmPassword"
               formControlName="confirmPassword"
               class="form-control"
-              [ngClass]="{'is-invalid': (registerForm.get('confirmPassword')?.invalid || registerForm.hasError('mismatch')) && registerForm.get('confirmPassword')?.touched}"
+              [ngClass]="{
+                'is-invalid':
+                  (registerForm.get('confirmPassword')?.invalid ||
+                    registerForm.hasError('mismatch')) &&
+                  registerForm.get('confirmPassword')?.touched
+              }"
             />
-            <div *ngIf="(registerForm.get('confirmPassword')?.invalid || registerForm.hasError('mismatch')) && registerForm.get('confirmPassword')?.touched" class="invalid-feedback">
-              <span *ngIf="registerForm.get('confirmPassword')?.errors?.['required']">La confirmación de contraseña es requerida</span>
-              <span *ngIf="registerForm.hasError('mismatch')">Las contraseñas no coinciden</span>
+            <div
+              *ngIf="
+                (registerForm.get('confirmPassword')?.invalid ||
+                  registerForm.hasError('mismatch')) &&
+                registerForm.get('confirmPassword')?.touched
+              "
+              class="invalid-feedback"
+            >
+              <span
+                *ngIf="
+                  registerForm.get('confirmPassword')?.errors?.['required']
+                "
+              >
+                La confirmación de contraseña es requerida
+              </span>
+              <span *ngIf="registerForm.hasError('mismatch')">
+                Las contraseñas no coinciden
+              </span>
             </div>
           </div>
+        </div>
+
+        <!-- Alertas -->
+        <div *ngIf="successMessage" class="alert alert-success">
+          {{ successMessage }}
         </div>
 
         <div *ngIf="error" class="alert alert-danger">
           {{ error }}
         </div>
 
+        <!-- Botón -->
         <button
           type="submit"
           class="btn btn-primary btn-block"
           [disabled]="registerForm.invalid || isLoading"
         >
-          <app-loading-spinner *ngIf="isLoading" size="small" color="light"></app-loading-spinner>
+          <app-loading-spinner
+            *ngIf="isLoading"
+            size="small"
+            color="light"
+          ></app-loading-spinner>
           <span *ngIf="!isLoading">Registrarse</span>
         </button>
       </form>
     </div>
 
     <div class="auth-footer">
-      <p>¿Ya tienes una cuenta? <a routerLink="/auth/login">Iniciar Sesión</a></p>
+      <p>
+        ¿Ya tienes una cuenta?
+        <a routerLink="/auth/login">Iniciar Sesión</a>
+      </p>
     </div>
   </div>
 </div>

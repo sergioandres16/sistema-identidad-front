@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
@@ -44,7 +44,7 @@ export interface User {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
   private apiUrl = `${environment.apiUrl}/auth`;
@@ -57,12 +57,16 @@ export class AuthService {
     this.autoLogin();
   }
 
+  /* ------------------------------------------------------------------ */
+  /* LOGIN                                                               */
+  /* ------------------------------------------------------------------ */
   login(username: string, password: string): Observable<LoginResponse> {
     const loginRequest: LoginRequest = { username, password };
 
-    return this.http.post<LoginResponse>(`${this.apiUrl}/login`, loginRequest)
+    return this.http
+      .post<LoginResponse>(`${this.apiUrl}/login`, loginRequest)
       .pipe(
-        tap(response => {
+        tap((response) => {
           this.handleAuthentication(
             response.id,
             response.username,
@@ -77,11 +81,51 @@ export class AuthService {
       );
   }
 
+  /* ------------------------------------------------------------------ */
+  /* REGISTER (con manejo de errores detallado)                          */
+  /* ------------------------------------------------------------------ */
   register(registerData: RegisterRequest): Observable<any> {
-    return this.http.post(`${this.apiUrl}/register`, registerData)
-      .pipe(catchError(this.handleError));
+    console.log('Datos de registro a enviar:', registerData);
+
+    return this.http.post(`${this.apiUrl}/register`, registerData, {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+      }),
+      responseType: 'text' // Cambia esto para manejar respuestas en texto plano
+    }).pipe(
+      tap(response => {
+        console.log('Respuesta exitosa:', response);
+      }),
+      catchError(error => {
+        console.error('Error en el servicio de registro:', error);
+
+        // Si es un error de análisis (parsing)
+        if (error.name === 'HttpErrorResponse' && error.error instanceof Error) {
+          return throwError(() => new Error('Error de comunicación con el servidor. Verifica tu conexión.'));
+        }
+
+        let errorMessage = 'Error desconocido al registrarse';
+
+        if (error.error && typeof error.error === 'string') {
+          errorMessage = error.error;
+        } else if (error.error && error.error.message) {
+          errorMessage = error.error.message;
+        } else if (error.status === 400) {
+          errorMessage = 'Datos de registro inválidos';
+        } else if (error.status === 409) {
+          errorMessage = 'El correo electrónico o nombre de usuario ya está en uso';
+        } else if (error.message) {
+          errorMessage = error.message;
+        }
+
+        return throwError(() => new Error(errorMessage));
+      })
+    );
   }
 
+  /* ------------------------------------------------------------------ */
+  /* SESIÓN Y TOKEN                                                      */
+  /* ------------------------------------------------------------------ */
   autoLogin() {
     const userData = localStorage.getItem('userData');
     if (!userData) {
@@ -90,7 +134,16 @@ export class AuthService {
 
     try {
       const parsedUser = JSON.parse(userData);
-      const { id, username, firstName, lastName, email, role, token, _tokenExpirationDate } = parsedUser;
+      const {
+        id,
+        username,
+        firstName,
+        lastName,
+        email,
+        role,
+        token,
+        _tokenExpirationDate,
+      } = parsedUser;
 
       const loadedUser: User = {
         id,
@@ -99,7 +152,7 @@ export class AuthService {
         lastName,
         email,
         role,
-        token
+        token,
       };
 
       if (loadedUser.token) {
@@ -107,7 +160,8 @@ export class AuthService {
 
         if (expirationDate > new Date()) {
           this.currentUserSubject.next(loadedUser);
-          const expirationDuration = expirationDate.getTime() - new Date().getTime();
+          const expirationDuration =
+            expirationDate.getTime() - new Date().getTime();
           this.autoLogout(expirationDuration);
         } else {
           this.logout();
@@ -134,6 +188,9 @@ export class AuthService {
     }, expirationDuration);
   }
 
+  /* ------------------------------------------------------------------ */
+  /* GETTERS COMUNES                                                     */
+  /* ------------------------------------------------------------------ */
   get isLoggedIn(): boolean {
     return !!this.currentUserSubject.value;
   }
@@ -158,6 +215,9 @@ export class AuthService {
     return this.userRole === 'ROLE_SCANNER';
   }
 
+  /* ------------------------------------------------------------------ */
+  /* UTILIDADES PRIVADAS                                                 */
+  /* ------------------------------------------------------------------ */
   private handleAuthentication(
     id: number,
     username: string,
@@ -167,7 +227,10 @@ export class AuthService {
     role: string,
     token: string
   ) {
-    const expirationDate = new Date(new Date().getTime() + 24 * 60 * 60 * 1000);
+    // durará 24 h
+    const expirationDate = new Date(
+      new Date().getTime() + 24 * 60 * 60 * 1000
+    );
 
     const user = {
       id,
@@ -177,7 +240,7 @@ export class AuthService {
       email,
       role,
       token,
-      _tokenExpirationDate: expirationDate
+      _tokenExpirationDate: expirationDate,
     };
 
     this.currentUserSubject.next(user);
